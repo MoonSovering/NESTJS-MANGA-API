@@ -1,15 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MangaService } from './manga.service';
 import { MangaController } from './manga.controller';
-import { DatabaseModule } from 'src/core/database/database.module';
-import { mangaProviders } from './manga.providers';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Manga } from './entities/manga.entity';
 
 @Module({
+  imports: [SequelizeModule.forFeature([Manga])],
   controllers: [MangaController],
-  imports: [DatabaseModule],
-  providers: [ 
-    MangaService,
-    ...mangaProviders
-    ]
+  providers: [MangaService,]
 })
 export class MangaModule {}

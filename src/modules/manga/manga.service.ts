@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { CreateMangaDto } from './dto/create-manga.dto';
 import { UpdateMangaDto } from './dto/update-manga.dto';
 import { Manga } from './entities/manga.entity';
@@ -7,7 +8,7 @@ import { Manga } from './entities/manga.entity';
 export class MangaService {
 
   constructor(
-    @Inject('MANGAS_REPOSITORY') 
+    @InjectModel(Manga)
     private mangaModel: typeof Manga
   ){}
 
