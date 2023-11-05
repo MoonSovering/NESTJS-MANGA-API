@@ -1,15 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 
+import { Author } from './entities/author.entity';
+import { Manga } from '../manga/entities';
+
 @Injectable()
 export class AuthorService {
+
+  constructor(
+    @InjectModel(Author) 
+    private authorModel: typeof Author
+  ){}
+
   create(createAuthorDto: CreateAuthorDto) {
-    return 'This action adds a new author';
+    return this.authorModel.create(createAuthorDto as any);
   }
 
   findAll() {
-    return `This action returns all author`;
+    return this.authorModel.findAll({ include: [Manga] });
   }
 
   findOne(id: string) {

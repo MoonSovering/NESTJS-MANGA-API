@@ -1,4 +1,5 @@
 
 export const envConfig = () => ( {
-    port: process.env.PORT || 1200
+    port: parseInt(process.env.PORT, 10) || 1200,
+
 });

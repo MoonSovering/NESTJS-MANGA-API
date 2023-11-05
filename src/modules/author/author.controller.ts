@@ -2,12 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AuthorService } from './author.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+import { FormDataRequest } from 'nestjs-form-data';
 
 @Controller('author')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Post()
+  @FormDataRequest()
   create(@Body() createAuthorDto: CreateAuthorDto) {
     return this.authorService.create(createAuthorDto);
   }
