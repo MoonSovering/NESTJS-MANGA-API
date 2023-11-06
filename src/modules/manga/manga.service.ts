@@ -25,7 +25,7 @@ export class MangaService {
 
   async create(createMangaDto: CreateMangaDto) {
 
-    const { author_name, categorie_name } = createMangaDto;
+    const { author_name, categorie_name, manga_name, chapters } = createMangaDto;
 
     try {
       
@@ -37,11 +37,30 @@ export class MangaService {
           ...transactionHost,
         });
 
-        createMangaDto.authorId = author.id;
 
-        await this.mangaModel.create(createMangaDto as any, transactionHost);
+        const [categorie] = await this.categorieModel.findOrCreate({
+          where: {categorie_name},
+          ...transactionHost
+        });
+
+        const authorId = author.id;
+        
+        const [manga] = await this.mangaModel.findOrCreate({
+          where: {manga_name, chapters, authorId},
+          ...transactionHost
+        })
+
+        const mangaId = manga.id;
+        const categorieId = categorie.id;
+
+
+        await this.mangaCategorieModel.findOrCreate({
+          where: {mangaId, categorieId},
+          ...transactionHost
+        })
 
       });
+
 
     } catch (error) {
       
@@ -49,7 +68,7 @@ export class MangaService {
 
     }
 
-    return 'all good'
+
 
 
   }
@@ -68,9 +87,11 @@ export class MangaService {
   findOne(id: string) {
     return this.mangaModel.findOne({
       where: { id },
-      // attributes: { exclude: ['createdAt', 'updatedAt' ] },
-      // include: [{ model: Author, attributes: { exclude: ['createdAt', 'updatedAt'] } }]
-      include: [{ model: Categorie }]
+      attributes: { exclude: ['createdAt', 'updatedAt', 'authorId' ] },
+      include: [
+      { model: Author, attributes: { exclude: ['createdAt', 'updatedAt'] } },
+      { model: Categorie, attributes: { exclude: ['createdAt', 'updatedAt'] } ,through: { attributes: [] } },
+    ]
     })
 
     

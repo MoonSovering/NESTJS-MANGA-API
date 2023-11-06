@@ -18,20 +18,20 @@ export class CreateMangaDto {
     author_name: string;
 
     @IsOptional()
-    @IsArray()
+    @IsString()
     categorie_name: string;
 
     @IsString()
     @IsOptional()
     authorId: string;
 
-    // @IsString()
-    // @IsOptional()
-    // mangaId: string;
+    @IsString()
+    @IsOptional()
+    mangaId: string;
 
-    // @IsString()
-    // @IsOptional()
-    // categorieId: string;
+    @IsString()
+    @IsOptional()
+    categorieId: string;
 
 }
 
