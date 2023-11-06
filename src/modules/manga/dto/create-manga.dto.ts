@@ -14,21 +14,24 @@ export class CreateMangaDto {
     @IsOptional()
     status: boolean;
 
-    @IsInt()
-    @IsPositive()
+    @IsString()
+    author_name: string;
+
     @IsOptional()
-    authorId: number;
+    @IsArray()
+    categorie_name: string;
 
+    @IsString()
+    @IsOptional()
+    authorId: string;
 
     // @IsString()
-    // author_name: string;
+    // @IsOptional()
+    // mangaId: string;
 
     // @IsString()
-    // profile_image?: string;
-
-    // @IsString({each: true})
-    // @IsArray()
-    // manga_image: string[];
+    // @IsOptional()
+    // categorieId: string;
 
 }
 

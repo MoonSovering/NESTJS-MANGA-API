@@ -1,8 +1,9 @@
-import { IsInt, IsPositive } from 'class-validator';
-import { UUIDV4 } from 'sequelize';
-import { Model, Table, Column, DataType, BelongsTo, ForeignKey  } from 'sequelize-typescript';
-// import { v4 as uuid } from 'uuid';
+import { IsInt, IsPositive, IsString } from 'class-validator';
+import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany  } from 'sequelize-typescript';
+
 import { Author } from 'src/modules/author/entities/author.entity';
+import { Categorie, MangaCategorie } from 'src/modules/categorie/entities';
+
 
 @Table
 export class Manga extends Model {
@@ -29,9 +30,7 @@ export class Manga extends Model {
     chapters: number;
 
     @ForeignKey( () => Author )
-    @IsInt()
-    @IsPositive()
-    authorId: number;
+    authorId: string;
     
     @Column({ 
         allowNull: false,
@@ -43,4 +42,8 @@ export class Manga extends Model {
     @BelongsTo( () => Author )
     author: Author
 
+    @BelongsToMany( () => Categorie, () => MangaCategorie )
+    categories: Categorie[]
+
 }
+

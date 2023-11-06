@@ -8,6 +8,8 @@ import { AuthorModule } from './modules/author/author.module';
 
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
+import { CategorieModule } from './modules/categorie/categorie.module';
+
 
 @Module({
   imports: [ 
@@ -23,7 +25,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
     ConfigModule.forRoot({
     isGlobal: true,
     load: [envConfig],
-  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}) ,],
+  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule],
 
   controllers: [],
   exports: [SequelizeModule]
