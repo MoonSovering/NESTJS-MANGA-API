@@ -1,5 +1,4 @@
-import { IsInt, IsPositive, IsString } from 'class-validator';
-import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany  } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, BeforeValidate  } from 'sequelize-typescript';
 
 import { Author } from 'src/modules/author/entities/author.entity';
 import { Categorie, MangaCategorie } from 'src/modules/categorie/entities';
@@ -45,5 +44,13 @@ export class Manga extends Model {
     @BelongsToMany( () => Categorie, () => MangaCategorie )
     categories: Categorie[]
 
+
+    @BeforeUpdate
+    @BeforeCreate
+    static checkNameInsert( instance: Manga ) {
+        instance.manga_name = instance.manga_name
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+    }
 }
 

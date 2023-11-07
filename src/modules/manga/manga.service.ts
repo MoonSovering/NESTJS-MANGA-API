@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -26,7 +26,7 @@ export class MangaService {
 
   async create(createMangaDto: CreateMangaDto) {
 
-    const { author_name, categorie_name, manga_name, chapters } = createMangaDto;
+    const { author_name, categorie_name, manga_name, chapters, profile_image } = createMangaDto;
 
     try {
       
@@ -35,42 +35,52 @@ export class MangaService {
 
         const [author] = await this.authorModel.findOrCreate({
           where: { author_name },
+          defaults: { profile_image },
           ...transactionHost,
         });
 
 
-        const [categorie] = await this.categorieModel.findOrCreate({
-          where: {categorie_name},
-          ...transactionHost
-        });
+        const categories = await Promise.all(
+          categorie_name.map( async(categorie_name) => {
+            const [categoria] = await this.categorieModel.findOrCreate({
+              where: {categorie_name},
+              ...transactionHost
+            });
+            return categoria.id;
+          } )
+        );
 
         const authorId = author.id;
         
         const [manga] = await this.mangaModel.findOrCreate({
-          where: {manga_name, chapters, authorId},
+          where: {manga_name, authorId},
+          defaults: {chapters},
           ...transactionHost
         })
 
         const mangaId = manga.id;
-        const categorieId = categorie.id;
 
-
-        await this.mangaCategorieModel.findOrCreate({
-          where: {mangaId, categorieId},
-          ...transactionHost
-        })
+        await Promise.all(
+          categories.map( async( categorieId ) => {
+            await this.mangaCategorieModel.findOrCreate({
+              where: { mangaId, categorieId },
+              ...transactionHost
+            })
+          } )
+        )
 
       });
 
 
+      return 'Manga succesfully create'
     } catch (error) {
       
       console.log(error);
 
+      throw new BadRequestException('Something happend while we were creating your manga, contact with the site administrator.')
+
     }
-
-
-
+ 
 
   }
 
@@ -90,8 +100,8 @@ export class MangaService {
       where: { id },
       attributes: { exclude: ['createdAt', 'updatedAt', 'authorId' ] },
       include: [
-      { model: Author, attributes: { exclude: ['createdAt', 'updatedAt'] } },
-      { model: Categorie, attributes: { exclude: ['createdAt', 'updatedAt'] } ,through: { attributes: [] } },
+      { model: Author, attributes: { exclude: ['createdAt', 'updatedAt', 'id'] } },
+      { model: Categorie, attributes: { exclude: ['createdAt', 'updatedAt', 'id'] } ,through: { attributes: [] } },
     ]
     })
 

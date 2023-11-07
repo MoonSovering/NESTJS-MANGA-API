@@ -6,9 +6,8 @@ export class CreateMangaDto {
     @IsString()
     manga_name: string;
 
-    @IsInt()
-    @IsPositive()
-    chapters: number;
+    @IsString()
+    chapters: string;
 
     @IsBoolean()
     @IsOptional()
@@ -18,20 +17,12 @@ export class CreateMangaDto {
     author_name: string;
 
     @IsOptional()
-    @IsString()
-    categorie_name: string;
+    @IsArray()
+    categorie_name: string[];
 
     @IsString()
     @IsOptional()
-    authorId: string;
-
-    @IsString()
-    @IsOptional()
-    mangaId: string;
-
-    @IsString()
-    @IsOptional()
-    categorieId: string;
-
+    profile_image: string;
+    
 }
 

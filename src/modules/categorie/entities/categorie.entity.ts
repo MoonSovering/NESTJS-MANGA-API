@@ -1,4 +1,4 @@
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeUpdate, BeforeValidate, BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { Manga } from "src/modules/manga/entities";
 import { MangaCategorie } from "./manga-categorie.entity";
 
@@ -16,7 +16,7 @@ export class Categorie extends Model {
 
     @Column({
         allowNull: false,
-        type: DataType.TEXT
+        type: DataType.STRING
     })
     categorie_name: string;
 
@@ -30,5 +30,13 @@ export class Categorie extends Model {
 
     @BelongsToMany( () => Manga, () => MangaCategorie )
     mangas: Manga[]
+
+    @BeforeUpdate
+    @BeforeCreate
+    static checkNameInsert( instance: Categorie ){
+        instance.categorie_name = instance.categorie_name
+            .toUpperCase()
+            .replace(/\s+/g, '_')
+    }
 
 }

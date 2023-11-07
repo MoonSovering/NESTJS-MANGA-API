@@ -1,4 +1,4 @@
-import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeUpdate, BeforeValidate, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Manga } from "src/modules/manga/entities";
 
 
@@ -36,4 +36,14 @@ export class Author extends Model {
 
     @HasMany( () => Manga )
     manga: Manga[]
+
+    @BeforeCreate
+    @BeforeUpdate
+    static checkNameInsert( instance: Author ){
+
+        instance.author_name = instance.author_name
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+
+    }
 }

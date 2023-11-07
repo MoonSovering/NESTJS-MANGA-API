@@ -13,7 +13,7 @@ export class CategorieService {
   ){}
 
   create(createCategorieDto: CreateCategorieDto) {
-    return this.categorieModel.create(createCategorieDto as any);
+    return this.categorieModel.bulkCreate(createCategorieDto as any);
   }
 
   findAll() {
