@@ -51,3 +51,5 @@ export class MangaController {
     return this.mangaService.remove(id);
   }
 }
+
+
