@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
+
 import { CreateMangaDto } from './dto/create-manga.dto';
 import { UpdateMangaDto } from './dto/update-manga.dto';
+
 import { Manga } from './entities/manga.entity';
 import { Author } from '../author/entities/author.entity';
 import { Categorie, MangaCategorie } from '../categorie/entities';
-import { Sequelize } from 'sequelize-typescript';
-// import { Author } from '../author/entities/author.entity';
 
 @Injectable()
 export class MangaService {

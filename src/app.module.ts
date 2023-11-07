@@ -1,26 +1,30 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 import { envConfig } from './config/env.config';
 import { MangaModule } from './modules/manga/manga.module';
 import { AuthorModule } from './modules/author/author.module';
+import { CategorieModule } from './modules/categorie/categorie.module';
 
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
-import { CategorieModule } from './modules/categorie/categorie.module';
 
 
 @Module({
   imports: [ 
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      port: parseInt(process.env.DBPORT),
-      username: 'sovering',
-      password: 'Urranrell318',
-      database: process.env.DATABASE,
-      synchronize: true,
-      autoLoadModels: true
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        dialect: 'postgres',
+        port: +configService.get(process.env.DBPORT),
+        username: 'sovering',
+        password: 'Urranrell318',
+        database: configService.get(process.env.DATABASE),
+        synchronize: true,
+        autoLoadModels: true
+      }),
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({
     isGlobal: true,
