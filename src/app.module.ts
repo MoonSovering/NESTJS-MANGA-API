@@ -30,7 +30,6 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     ConfigModule.forRoot({
     isGlobal: true,
     load: [envConfig],
-    ignoreEnvFile: true,
   }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule],
 
   controllers: [],

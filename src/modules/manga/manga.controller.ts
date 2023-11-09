@@ -1,16 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe } from '@nestjs/common';
 import { MangaService } from './manga.service';
+import { FormDataRequest } from 'nestjs-form-data';
 import { CreateMangaDto } from './dto/create-manga.dto';
 import { UpdateMangaDto } from './dto/update-manga.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { ParseTransformNamePipe } from './pipes/parseTransformName.pipe';
 
 @Controller('manga')
 export class MangaController {
   constructor(
-    private readonly mangaService: MangaService,
-    private readonly cloudinaryService: CloudinaryService
+    private readonly mangaService: MangaService
     ) {}
 
   @Post()
@@ -24,30 +23,32 @@ export class MangaController {
     ) file: Express.Multer.File
     ) {
     
-    const {secure_url} = await this.cloudinaryService.uploadFile(file);
+    // const {secure_url} = await this.cloudinaryService.uploadFile(file);
 
-    createMangaDto.profile_image = secure_url;
+    // createMangaDto.profile_image = secure_url;
     
-    return this.mangaService.create(createMangaDto);
+    return this.mangaService.createManga(createMangaDto, file);
   }
 
   @Get()
-  findAll() {
-    return this.mangaService.findAll();
+  findAllMangas() {
+    return this.mangaService.findAllMangas();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mangaService.findOne(id);
+  @Get(':uuid')
+  findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return this.mangaService.findOne(uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMangaDto: UpdateMangaDto) {
-    return this.mangaService.update(id, updateMangaDto);
+  @Patch(':uuid')
+  @FormDataRequest()
+  updateManga(@Param('uuid', new ParseUUIDPipe()) uuid: string, @Body(ParseTransformNamePipe) updateMangaDto: UpdateMangaDto) {
+    return this.mangaService.updateManga(uuid, updateMangaDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mangaService.remove(id);
+  @Delete(':uuid')
+  @FormDataRequest()
+  remove(@Param('uuid') uuid: string) {
+    return this.mangaService.remove(uuid);
   }
 }

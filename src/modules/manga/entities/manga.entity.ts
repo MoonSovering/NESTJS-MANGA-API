@@ -38,7 +38,7 @@ export class Manga extends Model {
      })
     status: boolean
 
-    @BelongsTo( () => Author )
+    @BelongsTo( () => Author, { foreignKey: 'authorId' })
     author: Author
 
     @BelongsToMany( () => Categorie, () => MangaCategorie )
