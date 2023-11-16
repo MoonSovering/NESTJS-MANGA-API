@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { envConfig } from './config/env.config';
+import { envConfig } from './core/config/env.config';
 import { MangaModule } from './modules/manga/manga.module';
 import { AuthorModule } from './modules/author/author.module';
 import { CategorieModule } from './modules/categorie/categorie.module';

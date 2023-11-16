@@ -30,5 +30,8 @@ export class CloudinaryService {
 
   }
 
+  async getImageUrl(publicId: string){
+    return await cloudinary.url(publicId);
+  }
 
 }

@@ -5,11 +5,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import {  Manga } from './entities';
 
 import { Categorie, MangaCategorie } from '../categorie/entities';
-import { Author } from '../author/entities/author.entity';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { AuthorModule } from '../author/author.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Manga, MangaCategorie, Author, Categorie]), CloudinaryModule],
+  imports: [SequelizeModule.forFeature([Manga, MangaCategorie, Categorie]), CloudinaryModule, AuthorModule],
   controllers: [MangaController],
   providers: [MangaService,]
 })

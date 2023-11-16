@@ -28,6 +28,12 @@ export class Manga extends Model {
     })
     chapters: number;
 
+    @Column({
+        allowNull: true,
+        type: DataType.STRING
+    })
+    cover_image: string;
+
     @ForeignKey( () => Author )
     authorId: string;
     
@@ -36,7 +42,7 @@ export class Manga extends Model {
         type: DataType.BOOLEAN,
         defaultValue: true
      })
-    status: boolean
+    isActive: boolean
 
     @BelongsTo( () => Author, { foreignKey: 'authorId' })
     author: Author

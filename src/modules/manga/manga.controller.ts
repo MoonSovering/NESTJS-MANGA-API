@@ -1,54 +1,86 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe } from '@nestjs/common';
-import { MangaService } from './manga.service';
-import { FormDataRequest } from 'nestjs-form-data';
-import { CreateMangaDto } from './dto/create-manga.dto';
-import { UpdateMangaDto } from './dto/update-manga.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseTransformNamePipe } from './pipes/parseTransformName.pipe';
+
+import { FormDataRequest } from 'nestjs-form-data';
+
+import { CreateMangaDto, UpdateMangaDto } from './dto';
+import { MangaService } from './manga.service';
+import { ParseTransformNamePipe } from '../../core/pipes/parseTransformName.pipe';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { AuthorService } from '../author/author.service';
 
 @Controller('manga')
 export class MangaController {
   constructor(
-    private readonly mangaService: MangaService
+    private readonly mangaService: MangaService,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly authorService:AuthorService,
     ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('profile_image'))
+  @UseInterceptors(FileInterceptor('cover_image'))
   async createManga(
-    @Body(ParseTransformNamePipe) createMangaDto: CreateMangaDto,
+    @Body(ParseTransformNamePipe) body: CreateMangaDto,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [ new FileTypeValidator({ fileType: '.(png|jpg|jpeg)' }) ]
+        validators: [ new FileTypeValidator({ fileType: '.(png|jpg|jpeg)' }) ],
+        fileIsRequired: false
       })
     ) file: Express.Multer.File
     ) {
-    
-    // const {secure_url} = await this.cloudinaryService.uploadFile(file);
 
-    // createMangaDto.profile_image = secure_url;
-    
-    return this.mangaService.createManga(createMangaDto, file);
+    const { author_name } = body;
+
+    const author = await this.authorService.findOneAuthor(author_name);
+
+    if(!author) throw new BadRequestException(`Author named ${author_name} cannot be found, an existing one must be provided`)
+    body.authorId = author.id;
+
+    if(file){
+        const { secure_url } = await this.cloudinaryService.uploadFile(file);
+        body.cover_image = secure_url;
+      }
+    const manga = await this.mangaService.createManga(body);
+
+    return {
+      message: 'Manga created succesfully',
+      data: manga
+    }
   }
 
+
   @Get()
-  findAllMangas() {
-    return this.mangaService.findAllMangas();
+  async findAllMangas() {
+    const results = await this.mangaService.findAllMangas();
+
+    if(results.length === 0) throw new BadRequestException('No manga found in the manga list.')
+
+    return {
+      message: 'Mangas fetched succesfully.',
+      data: results
+    }
   }
 
   @Get(':uuid')
-  findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
-    return this.mangaService.findOne(uuid);
-  }
+  async findOneManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const result = await this.mangaService.findOneManga(uuid);
 
-  @Patch(':uuid')
-  @FormDataRequest()
-  updateManga(@Param('uuid', new ParseUUIDPipe()) uuid: string, @Body(ParseTransformNamePipe) updateMangaDto: UpdateMangaDto) {
-    return this.mangaService.updateManga(uuid, updateMangaDto);
+    if(!result) throw new BadRequestException(`Manga with ID ${uuid} cannot be found.`);
+
+    return {
+      message: 'Manga fetched succesfully',
+      data: result
+    }
   }
 
   @Delete(':uuid')
-  @FormDataRequest()
-  remove(@Param('uuid') uuid: string) {
-    return this.mangaService.remove(uuid);
+  async removeManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const deleted  = await this.mangaService.removeManga(uuid);
+    if(deleted === 0) throw new BadRequestException('No deleted were made.');
+
+    return {
+      message: 'Author deleted succesfully',
+      data: deleted
+    }
   }
 }

@@ -35,7 +35,7 @@ export class Author extends Model {
     status: boolean
 
     @HasMany( () => Manga )
-    manga: Manga[]
+    mangas: Manga[]
 
     @BeforeCreate
     @BeforeUpdate

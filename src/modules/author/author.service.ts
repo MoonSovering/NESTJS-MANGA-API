@@ -1,37 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-import { CreateAuthorDto } from './dto/create-author.dto';
-import { UpdateAuthorDto } from './dto/update-author.dto';
-
+import { CreateAuthorDto, UpdateAuthorDto } from './dto';
 import { Author } from './entities/author.entity';
 import { Manga } from '../manga/entities';
+import { Op } from 'sequelize';
+
 
 @Injectable()
 export class AuthorService {
 
   constructor(
     @InjectModel(Author) 
-    private authorModel: typeof Author
+    private readonly authorModel: typeof Author,
   ){}
 
-  create(createAuthorDto: CreateAuthorDto) {
-    return this.authorModel.create(createAuthorDto as any);
+  async createAuthor(body: CreateAuthorDto): Promise<Author> {
+    try {
+      return await this.authorModel.create(body as any);
+    } catch (error) {
+      console.log(error);
+      if(error.name === 'SequelizeUniqueConstraintError') throw new BadRequestException(`Register already exist in DB ${ JSON.stringify( error.errors[0].message ) }`)
+    }
   }
 
-  findAll() {
-    return this.authorModel.findAll({ include: [Manga] });
+  async findAllAuthor() {
+    return await this.authorModel.findAll({ include: [Manga] } );
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} author`;
+  async findOneAuthor(term: string) {
+    return await this.authorModel.findOne({ where: {author_name: term}, include: [Manga] });
   }
 
-  update(id: string, updateAuthorDto: UpdateAuthorDto) {
-    return `This action updates a #${id} author`;
+  updateAuthor(uuid: string, body: UpdateAuthorDto) {
+    return this.authorModel.update(body, {where: {id: uuid}, returning: true});
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} author`;
+  async removeAuthor(uuid: string) {
+    return await this.authorModel.destroy({where: {id: uuid}});
   }
 }

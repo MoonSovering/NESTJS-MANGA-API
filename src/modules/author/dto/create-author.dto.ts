@@ -14,7 +14,7 @@ export class CreateAuthorDto {
 
     @IsBoolean()
     @IsOptional()
-    status: boolean;
+    isActive: boolean;
 
 }
 

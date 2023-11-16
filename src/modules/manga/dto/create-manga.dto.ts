@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsPositive,IsArray, IsBoolean, IsOptional } from "class-validator";
+import { IsString, IsBoolean, IsOptional } from "class-validator";
 
 
 export class CreateMangaDto {
@@ -9,20 +9,20 @@ export class CreateMangaDto {
     @IsString()
     chapters: string;
 
-    @IsBoolean()
-    @IsOptional()
-    status: boolean;
-
     @IsString()
     author_name: string;
 
+    @IsString()
     @IsOptional()
-    @IsArray()
-    categorie_name: string[];
+    authorId: string;
 
     @IsString()
     @IsOptional()
-    profile_image: string;
+    cover_image: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive: boolean;
     
 }
 
