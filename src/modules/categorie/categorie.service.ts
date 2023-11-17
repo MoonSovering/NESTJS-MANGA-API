@@ -12,8 +12,8 @@ export class CategorieService {
     private categorieModel: typeof Categorie
   ){}
 
-  create(createCategorieDto: CreateCategorieDto) {
-    return this.categorieModel.bulkCreate(createCategorieDto as any);
+  create(body: CreateCategorieDto) {
+    return this.categorieModel.bulkCreate(body as any);
   }
 
   findAll() {

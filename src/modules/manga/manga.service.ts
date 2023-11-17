@@ -21,7 +21,8 @@ export class MangaService {
 
   async findAllMangas(): Promise<Manga[]> {
     return await this.mangaModel.findAll({
-      where: {isActive: true}
+      where: {isActive: true},
+      include: [Author]
     });
   }
 
@@ -34,7 +35,6 @@ export class MangaService {
 
   async removeManga(uuid: string): Promise<number> {
     return await this.mangaModel.destroy({ where: {id: uuid} });
-    
   }
 
 }

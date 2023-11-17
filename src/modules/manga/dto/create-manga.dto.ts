@@ -1,9 +1,10 @@
-import { IsString, IsBoolean, IsOptional } from "class-validator";
+import { IsString, IsBoolean, IsOptional, MinLength } from "class-validator";
 
 
 export class CreateMangaDto {
 
     @IsString()
+    @MinLength(2)
     manga_name: string;
 
     @IsString()

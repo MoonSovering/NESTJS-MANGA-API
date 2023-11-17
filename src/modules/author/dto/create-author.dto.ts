@@ -10,7 +10,7 @@ export class CreateAuthorDto {
 
     @IsString()
     @IsOptional()
-    profile_image: string;
+    profile_image?: string;
 
     @IsBoolean()
     @IsOptional()

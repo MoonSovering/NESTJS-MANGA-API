@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { FormDataRequest } from 'nestjs-form-data';
 
 import { CreateMangaDto, UpdateMangaDto } from './dto';
 import { MangaService } from './manga.service';
 import { ParseTransformNamePipe } from '../../core/pipes/parseTransformName.pipe';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AuthorService } from '../author/author.service';
+import { CLOUDINARY_BASE_URL } from 'src/core/Constants/constants';
 
 @Controller('manga')
 export class MangaController {
@@ -30,16 +30,16 @@ export class MangaController {
     ) {
 
     const { author_name } = body;
+    if(!author_name) throw new BadRequestException(`Author named "${author_name}" cannot be found, an existing one must be provided`)
 
-    const author = await this.authorService.findOneAuthor(author_name);
-
-    if(!author) throw new BadRequestException(`Author named ${author_name} cannot be found, an existing one must be provided`)
-    body.authorId = author.id;
-
+    const {id: authorId} = await this.authorService.findOneAuthor(author_name) || await this.authorService.createAuthor(body);
+    body.authorId = authorId;
+    
     if(file){
-        const { secure_url } = await this.cloudinaryService.uploadFile(file);
-        body.cover_image = secure_url;
+        const {format, public_id} = await this.cloudinaryService.uploadFile(file);
+        body.cover_image = `${CLOUDINARY_BASE_URL}/${public_id}.${format}`
       }
+      
     const manga = await this.mangaService.createManga(body);
 
     return {
@@ -75,11 +75,14 @@ export class MangaController {
 
   @Delete(':uuid')
   async removeManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const { cover_image } = await this.mangaService.findOneManga(uuid);
+    const public_id = cover_image.split('/').pop().split('.')[0];
     const deleted  = await this.mangaService.removeManga(uuid);
+    await this.cloudinaryService.destroyFile(public_id);
     if(deleted === 0) throw new BadRequestException('No deleted were made.');
 
     return {
-      message: 'Author deleted succesfully',
+      message: 'Manga deleted succesfully',
       data: deleted
     }
   }

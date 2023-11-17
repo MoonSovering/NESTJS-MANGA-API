@@ -4,7 +4,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateAuthorDto, UpdateAuthorDto } from './dto';
 import { Author } from './entities/author.entity';
 import { Manga } from '../manga/entities';
-import { Op } from 'sequelize';
 
 
 @Injectable()
