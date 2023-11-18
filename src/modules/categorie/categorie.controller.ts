@@ -10,11 +10,6 @@ export class CategorieController {
 
   @Post()
   async create(@Body(ParseTransformNamePipe) body: CreateCategorieDto) {
-    const categorie = await this.categorieService.create(body);
-
-    console.log(categorie);
-    console.log(body);
-    return categorie;
   }
 
   @Get()

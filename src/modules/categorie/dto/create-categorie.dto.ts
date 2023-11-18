@@ -1,15 +1,18 @@
-import { IsBoolean, MinLength, IsOptional, IsArray } from "class-validator";
+import { IsBoolean, MinLength, IsOptional, IsArray, IsString } from "class-validator";
 
 
 
 export class CreateCategorieDto {
 
-    @MinLength(1)
+    @MinLength(2, {
+        each: true,
+    })
     @IsArray()
+    @IsString({each: true})
     categorie_name: string[];
 
     @IsBoolean()
     @IsOptional()
-    isActive: boolean;
+    isActive?: boolean;
 
 }

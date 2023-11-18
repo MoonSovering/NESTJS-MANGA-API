@@ -29,18 +29,21 @@ export class MangaController {
     ) file: Express.Multer.File
     ) {
 
-    const { author_name } = body;
+    const { author_name, ...mangaDetails } = body;
     if(!author_name) throw new BadRequestException(`Author named "${author_name}" cannot be found, an existing one must be provided`)
 
-    const {id: authorId} = await this.authorService.findOneAuthor(author_name) || await this.authorService.createAuthor(body);
-    body.authorId = authorId;
+    const {id} = await this.authorService.findOneAuthor(author_name) || await this.authorService.createAuthor(body);
     
     if(file){
         const {format, public_id} = await this.cloudinaryService.uploadFile(file);
         body.cover_image = `${CLOUDINARY_BASE_URL}/${public_id}.${format}`
       }
       
-    const manga = await this.mangaService.createManga(body);
+    const manga = await this.mangaService.createManga({
+      ...mangaDetails,
+      authorId: id,
+      author_name
+    });
 
     return {
       message: 'Manga created succesfully',

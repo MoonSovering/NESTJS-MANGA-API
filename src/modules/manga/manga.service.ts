@@ -5,7 +5,6 @@ import { CreateMangaDto, UpdateMangaDto } from './dto';
 
 import { Manga } from './entities/manga.entity';
 import { Author } from '../author/entities/author.entity';
-import { Categorie } from '../categorie/entities';
 
 @Injectable()
 export class MangaService {
@@ -16,7 +15,10 @@ export class MangaService {
   ){}
 
   async createManga(body: CreateMangaDto): Promise<Manga>{
-    return await this.mangaModel.create(body as any);
+
+    const { author_name, ...mangaDetails } = body; 
+
+    return await this.mangaModel.create(mangaDetails);
   }
 
   async findAllMangas(): Promise<Manga[]> {

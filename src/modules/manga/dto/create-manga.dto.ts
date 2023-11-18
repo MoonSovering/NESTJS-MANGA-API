@@ -11,6 +11,7 @@ export class CreateMangaDto {
     chapters: string;
 
     @IsString()
+    @IsOptional()
     author_name: string;
 
     @IsString()
