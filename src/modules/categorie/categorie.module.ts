@@ -10,5 +10,6 @@ import { Categorie, MangaCategorie } from './entities';
   imports: [ SequelizeModule.forFeature([Categorie, MangaCategorie]) ],
   controllers: [CategorieController],
   providers: [CategorieService],
+  exports: [CategorieService]
 })
 export class CategorieModule {}

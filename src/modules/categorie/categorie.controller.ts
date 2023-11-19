@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
 import { CategorieService } from './categorie.service';
 import { CreateCategorieDto, UpdateCategorieDto } from './dto';
-import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
-import { Categorie } from './entities';
+import { ParseTransformNamePipe, ParseTransformParamPipe } from 'src/core/pipes/parseTransformName.pipe';
 
 
 @Controller('categorie')
@@ -17,30 +16,65 @@ export class CategorieController {
 
     return {
       message: 'Categories created succesfully',
-      data: result
+      data: result.map( ([category]) => ( category.categorie_name ) )
     }
 
   }
 
   @Get()
-  findAll() {
-    return this.categorieService.findAll();
+  async findAllCategory() {
+    const results = await this.categorieService.findAllCategory();
+
+    const response = results.map((result) => ({
+      id: result.id,
+      category_name: result.categorie_name,
+      mangas: result.mangas.map((data) => ({
+        id: data.id,
+        manga_name: data.manga_name,
+        chapters: data.chapters,
+        cover_image: data.cover_image
+      }))
+    }));
+
+
+    return {
+      message: 'Categories fetched succesfully',
+      data: response
+    }
   }
 
 
   @Get(':uuid')
-  findOne(@Param('uuid') uuid: string) {
-    return this.categorieService.findOne(uuid);
-  }
+  async findOneCategory(@Param('uuid', ParseUUIDPipe ) uuid: string) {
+    const result = await this.categorieService.findOneCategory(uuid);
 
-  @Patch(':uuid')
-  update(@Param('uuid') uuid: string, @Body() body: UpdateCategorieDto) {
-    return this.categorieService.update(uuid, body);
+    if(!result) throw new BadRequestException(`Category with ID ${uuid} cannot be found.`);
+
+
+    const response = {
+      id: result.id,
+      category_name: result.categorie_name,
+      mangas: result.mangas.map( (data) => ({
+        id: data.id, 
+        manga_name: data.manga_name,
+        chapters: data.chapters,
+        cover_image: data.cover_image
+      }) )
+    }
+
+    return {
+      message: 'Category fetched succesfully',
+      data: response
+    }
   }
 
   @Delete(':uuid')
-  remove(@Param('uuid') uuid: string) {
-    return this.categorieService.remove(uuid);
+  async removeCategory(@Param('uuid', ParseUUIDPipe) uuid: string) {
+    const result = await this.categorieService.removeCategory(uuid);
+    if(result === 0) throw new BadRequestException('No deleted were made.');
+    return {
+      message: 'Category deleted succesfully'
+    }
   }
 
 }

@@ -14,9 +14,12 @@ export class AuthorService {
     private readonly authorModel: typeof Author,
   ){}
 
-  async createAuthor(body: CreateAuthorDto): Promise<Author> {
+  async createAuthor(body: CreateAuthorDto) {
+
+    const {author_name} = body
+
     try {
-      return await this.authorModel.create(body as any);
+      return await this.authorModel.findOrCreate({ where: {author_name} });
     } catch (error) {
       console.log(error);
       if(error.name === 'SequelizeUniqueConstraintError') throw new BadRequestException(`Register already exist in DB ${ JSON.stringify( error.errors[0].message ) }`)

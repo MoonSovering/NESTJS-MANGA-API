@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsOptional, MinLength } from "class-validator";
+import { IsString, IsBoolean, IsOptional, MinLength, IsArray } from "class-validator";
 
 
 export class CreateMangaDto {
@@ -13,6 +13,13 @@ export class CreateMangaDto {
     @IsString()
     @IsOptional()
     author_name: string;
+
+    @MinLength(2, {
+        each: true,
+    })
+    @IsArray()
+    @IsString({ each: true })
+    categorie_name: string[];
 
     @IsString()
     @IsOptional()

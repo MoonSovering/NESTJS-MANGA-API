@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata, Param } from '@nestjs/common';
 
 @Injectable()
 export class ParseTransformNamePipe implements PipeTransform {
@@ -19,5 +19,17 @@ export class ParseTransformNamePipe implements PipeTransform {
     }
 
     return value;
+
   }
+}
+export class ParseTransformParamPipe implements PipeTransform {
+
+  transform(value: any, metadata: ArgumentMetadata) {
+      if(value){
+        value = value.toUpperCase().trim().replace(/\s+/g, '');
+      }
+
+      return value;
+  }
+
 }

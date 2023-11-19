@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategorieDto } from './dto/create-categorie.dto';
-import { UpdateCategorieDto } from './dto/update-categorie.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Categorie } from './entities/categorie.entity';
+import { Manga } from '../manga/entities';
 
 @Injectable()
 export class CategorieService {
@@ -16,31 +16,31 @@ export class CategorieService {
     
     const { categorie_name } = body;
 
-    const category = await Promise.all(categorie_name.map(async (name) => {
+    return await Promise.all(categorie_name.map(async (name) => {
       return await this.categorieModel.findOrCreate({
         where: {categorie_name: name}
       });
 
     }));
 
-    return category;
   }
 
-  findAll() {
-    return this.categorieModel.findAll();
+  findAllCategory() {
+    return this.categorieModel.findAll({
+      include: [ {model: Manga, through: {attributes: []}} ]
+    });
   }
 
-  findOne(id: string) {
+  findOneCategory(uuid: string) {
     return this.categorieModel.findOne({
-      where: { id }
+      where: { id: uuid },
+      include: [ {model: Manga, through: {attributes: []}} ]
     })
   }
 
-  update(id: string, updateCategorieDto: UpdateCategorieDto) {
-    return `This action updates a #${id} categorie`;
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} categorie`;
+  removeCategory(uuid: string) {
+    return this.categorieModel.destroy({
+      where: {id: uuid}
+    })
   }
 }

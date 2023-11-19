@@ -5,6 +5,7 @@ import { CreateMangaDto, UpdateMangaDto } from './dto';
 
 import { Manga } from './entities/manga.entity';
 import { Author } from '../author/entities/author.entity';
+import { Categorie } from '../categorie/entities';
 
 @Injectable()
 export class MangaService {
@@ -23,14 +24,20 @@ export class MangaService {
   async findAllMangas(): Promise<Manga[]> {
     return await this.mangaModel.findAll({
       where: {isActive: true},
-      include: [Author]
+      include: [
+        { model: Author, attributes: { exclude: ['createdAt','updatedAt', 'status' ] } },
+        {model: Categorie, through: {attributes: []}}
+      ]
     });
   }
 
   async findOneManga(uuid: string): Promise<Manga> {
     return this.mangaModel.findOne({
       where:  {id: uuid}, 
-      include: [Author]
+      include: [
+        { model: Author, attributes: { exclude: ['createdAt','updatedAt', 'status' ] } },
+        {model: Categorie, through: {attributes: []}}
+      ]
     });
   }
 
