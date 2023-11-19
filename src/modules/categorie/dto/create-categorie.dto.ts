@@ -8,8 +8,9 @@ export class CreateCategorieDto {
         each: true,
     })
     @IsArray()
-    @IsString({each: true})
+    @IsString({ each: true })
     categorie_name: string[];
+
 
     @IsBoolean()
     @IsOptional()

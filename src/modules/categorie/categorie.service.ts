@@ -13,7 +13,17 @@ export class CategorieService {
   ){}
 
   async createCategorie(body: CreateCategorieDto){
-    return await this.categorieModel.bulkCreate(body as any);
+    
+    const { categorie_name } = body;
+
+    const category = await Promise.all(categorie_name.map(async (name) => {
+      return await this.categorieModel.findOrCreate({
+        where: {categorie_name: name}
+      });
+
+    }));
+
+    return category;
   }
 
   findAll() {

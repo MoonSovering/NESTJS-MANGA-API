@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CategorieService } from './categorie.service';
 import { CreateCategorieDto, UpdateCategorieDto } from './dto';
 import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
+import { Categorie } from './entities';
 
 
 @Controller('categorie')
@@ -10,12 +11,22 @@ export class CategorieController {
 
   @Post()
   async create(@Body(ParseTransformNamePipe) body: CreateCategorieDto) {
+
+    
+    const result = await this.categorieService.createCategorie(body)
+
+    return {
+      message: 'Categories created succesfully',
+      data: result
+    }
+
   }
 
   @Get()
   findAll() {
     return this.categorieService.findAll();
   }
+
 
   @Get(':uuid')
   findOne(@Param('uuid') uuid: string) {

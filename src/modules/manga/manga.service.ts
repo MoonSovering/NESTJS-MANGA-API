@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateMangaDto, UpdateMangaDto } from './dto';
@@ -17,7 +17,6 @@ export class MangaService {
   async createManga(body: CreateMangaDto): Promise<Manga>{
 
     const { author_name, ...mangaDetails } = body; 
-
     return await this.mangaModel.create(mangaDetails);
   }
 
