@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CloudinaryResponse } from './cloudinary-response';
 import { v2 as cloudinary } from 'cloudinary';
+import { ZipInterface } from '../unzip/zip.interface';
 const streamifier = require('streamifier');
 
 @Injectable()
 export class CloudinaryService {
 
-  uploadFile( file: Express.Multer.File ): Promise<CloudinaryResponse> {
+  uploadFile( file: ZipInterface |Express.Multer.File ): Promise<CloudinaryResponse> {
 
     const cloudiFile = new Promise<CloudinaryResponse>( (resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(

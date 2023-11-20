@@ -12,6 +12,7 @@ import { CategorieModule } from '../categorie/categorie.module';
 @Module({
   imports: [SequelizeModule.forFeature([Manga, Categorie]), CloudinaryModule, AuthorModule, CategorieModule],
   controllers: [MangaController],
-  providers: [MangaService,]
+  providers: [MangaService,],
+  exports: [MangaService]
 })
 export class MangaModule {}

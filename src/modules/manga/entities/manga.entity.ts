@@ -1,7 +1,8 @@
-import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, BeforeValidate  } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, BeforeValidate, HasMany  } from 'sequelize-typescript';
 
 import { Author } from 'src/modules/author/entities/author.entity';
 import { Categorie, MangaCategorie } from 'src/modules/categorie/entities';
+import { Chapter } from 'src/modules/chapters/entities/chapter.entity';
 
 
 @Table
@@ -22,11 +23,11 @@ export class Manga extends Model {
     })
     manga_name: string;
 
-    @Column({
-        allowNull: false,
-        type: DataType.INTEGER
-    })
-    chapters: number;
+    // @Column({
+    //     allowNull: false,
+    //     type: DataType.INTEGER
+    // })
+    // chapters: number;
 
     @Column({
         allowNull: true,
@@ -43,6 +44,9 @@ export class Manga extends Model {
         defaultValue: true
      })
     isActive: boolean
+
+    @HasMany( () => Chapter )
+    chapters: Chapter[]
 
     @BelongsTo( () => Author, { foreignKey: 'authorId' })
     author: Author

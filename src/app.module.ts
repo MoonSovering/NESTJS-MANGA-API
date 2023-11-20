@@ -9,6 +9,8 @@ import { CategorieModule } from './modules/categorie/categorie.module';
 
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ChaptersModule } from './modules/chapters/chapters.module';
+import { UnzipModule } from './modules/unzip/unzip.module';
 
 
 
@@ -30,7 +32,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     ConfigModule.forRoot({
     isGlobal: true,
     load: [envConfig],
-  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule],
+  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule],
 
   controllers: [],
   exports: [SequelizeModule]
