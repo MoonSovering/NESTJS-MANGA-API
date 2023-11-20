@@ -71,10 +71,15 @@ export class MangaController {
     const response =  results.map( (manga) => ({
       id: manga.id,
       manga_name: manga.manga_name,
-      chapter: manga.chapters,
       cover_image: manga.cover_image,
       author: manga.author,
-      categories: manga.categories.map( category => category.categorie_name )
+      categories: manga.categories.map( category => category.categorie_name ),
+      chapters: manga.chapters.map( chapter => ({
+        id: chapter.id,
+        chapter_name: chapter.chapter_name,
+        chapter_number: chapter.chapter_number,
+        images: chapter.images.map(image => image.image_url)
+      }))
     }) )
     
     return {
@@ -93,10 +98,15 @@ export class MangaController {
     const response = {
       id: result.id,
       manga_name: result.manga_name,
-      chapter: result.chapters,
       cover_image: result.cover_image,
       author: result.author,
-      categories: result.categories.map(category => category.categorie_name)
+      categories: result.categories.map(category => category.categorie_name),
+      chapters: result.chapters.map( chapter => ({
+        id: chapter.id,
+        chapter_name: chapter.chapter_name,
+        chapter_number: chapter.chapter_number,
+        images: chapter.images.map( ({image_url}) => (image_url) )
+      }) )
     }
 
     return {
@@ -111,7 +121,7 @@ export class MangaController {
     const public_id = cover_image.split('/').pop().split('.')[0];
     const deleted  = await this.mangaService.removeManga(uuid);
     await this.cloudinaryService.destroyFile(public_id);
-    if(deleted === 0) throw new BadRequestException('No deleted were made.');
+    if(deleted === 0) throw new BadRequestException('No deleted were made.');  
 
     return {
       message: 'Manga deleted succesfully',

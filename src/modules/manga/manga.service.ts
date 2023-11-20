@@ -6,6 +6,7 @@ import { CreateMangaDto, UpdateMangaDto } from './dto';
 import { Manga } from './entities/manga.entity';
 import { Author } from '../author/entities/author.entity';
 import { Categorie } from '../categorie/entities';
+import { Chapter, Images } from '../chapters/entities';
 
 @Injectable()
 export class MangaService {
@@ -26,7 +27,8 @@ export class MangaService {
       where: {isActive: true},
       include: [
         { model: Author, attributes: { exclude: ['createdAt','updatedAt', 'status' ] } },
-        {model: Categorie, through: {attributes: []}}
+        {model: Categorie, through: {attributes: []}},
+        {model: Chapter, include: [Images]}
       ]
     });
   }
@@ -36,7 +38,8 @@ export class MangaService {
       where:  {id: uuid}, 
       include: [
         { model: Author, attributes: { exclude: ['createdAt','updatedAt', 'status' ] } },
-        {model: Categorie, through: {attributes: []}}
+        {model: Categorie, through: {attributes: []}},
+        {model: Chapter, include: [Images]}
       ]
     });
   }

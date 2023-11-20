@@ -8,9 +8,6 @@ export class CreateMangaDto {
     manga_name: string;
 
     @IsString()
-    chapters: string;
-
-    @IsString()
     @IsOptional()
     author_name: string;
 

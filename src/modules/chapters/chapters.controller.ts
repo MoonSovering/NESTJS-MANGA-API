@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException, ParseUUIDPipe } from '@nestjs/common';
 import { ChaptersService } from './chapters.service';
 import { CreateChapterDto } from './dto/create-chapter.dto';
 import { UpdateChapterDto } from './dto/update-chapter.dto';
@@ -60,22 +60,57 @@ export class ChaptersController {
   }
 
   @Get()
-  findAll() {
-    return this.chaptersService.findAll();
+  async findAllChapters() {
+    const results = await this.chaptersService.findAllChapter();
+
+    if(results.length === 0) throw new BadRequestException('No chapters found in the chapter list.')
+
+    const response = results.map( (chapter) => ({
+      id: chapter.id,
+      chapter_name: chapter.chapter_name,
+      chapter_number: chapter.chapter_number,
+      images: chapter.images.map( (image) => image.image_url )
+    }) );
+
+    return {
+      message: 'Chapters fetched succesfully.',
+      chapter: response
+    }
+
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.chaptersService.findOne(+id);
+  @Get(':uuid')
+  async findOneChapter(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const result =  await this.chaptersService.findOneChapter(uuid);
+
+    if(!result) throw new BadRequestException(`Chapter with ID ${uuid} cannot be found.`);
+
+    const response = {
+      id: result.id,
+      chapter_name: result.chapter_name,
+      chapter_number: result.chapter_number,
+      images: result.images.map( (image) => image.image_url )
+    }
+
+    return {
+      message: 'Chapter fetched succesfully',
+      data: response
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChapterDto: UpdateChapterDto) {
-    return this.chaptersService.update(+id, updateChapterDto);
-  }
+  @Delete(':uuid')
+  async removeChapter(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const { images } = await this.chaptersService.findOneChapter(uuid);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.chaptersService.remove(+id);
+    const public_id = images.map( (image) => image.image_url.split('/').pop().split('.')[0] );
+    await Promise.all( public_id.map( async (id) => await this.cloudinaryService.destroyFile(id)  ) )
+    const deleted = await this.chaptersService.removeChapter(uuid);
+    if(deleted === 0) throw new BadRequestException('No deleted were made.'); 
+
+    return {
+      message: 'Manga deleted succesfully',
+      data: deleted
+    }
+
   }
 }

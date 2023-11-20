@@ -50,19 +50,22 @@ export class ChaptersService {
 
   }
 
-  findAll() {
-    return this.chapterModel.findAll();
+  async findAllChapter() {
+    return await this.chapterModel.findAll({
+      include: [Images]
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chapter`;
+  async findOneChapter(uuid: string) {
+    return await this.chapterModel.findOne({
+      where: {id: uuid},
+      include: [Images]
+    })
   }
 
-  update(id: number, updateChapterDto: UpdateChapterDto) {
-    return `This action updates a #${id} chapter`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} chapter`;
+  async removeChapter(uuid: string) {
+    return await this.chapterModel.destroy({
+      where: {id: uuid}
+    });
   }
 }

@@ -23,12 +23,6 @@ export class Manga extends Model {
     })
     manga_name: string;
 
-    // @Column({
-    //     allowNull: false,
-    //     type: DataType.INTEGER
-    // })
-    // chapters: number;
-
     @Column({
         allowNull: true,
         type: DataType.STRING
