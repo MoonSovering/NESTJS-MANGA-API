@@ -31,29 +31,24 @@ export class MangaController {
     ) file: Express.Multer.File
     ) {
 
-    let image_url = ''
-    const { author_name, categorie_name, ...mangaDetails } = body;
-    if(!author_name) throw new BadRequestException(`Author named "${author_name}" cannot be found, an existing one must be provided`)
-
-    const [authorData] = await this.authorService.createAuthor(body);
+    let book_cover = ''
+    const { author_id, cover_image, categorie_name = [],...mangaDetails } = body;
+    const authorId = await this.authorService.findOneAuthor(author_id);
+    if(!authorId) throw new BadRequestException(`Author with ID ${authorId} cannot be found.`)
+    const categoryIds = (await this.categorieService.findManyCategory(categorie_name)).map( id => id.id );
     if(file){
         const {format, public_id} = await this.cloudinaryService.uploadFile(file);
-        image_url = `${CLOUDINARY_BASE_URL}/${public_id}.${format}`
+        book_cover = `${CLOUDINARY_BASE_URL}/${public_id}.${format}`
       }
-
-    const categorie = (await this.categorieService.createCategorie(body)).map(([category]) => ( category.id ))
-
-    const mangaData = {
-      ...mangaDetails,
-      author_name: authorData.author_name,
-      cover_image: image_url,
-      authorId: authorData.id,
-      categorie_name
-    }
     
-    const manga = await this.mangaService.createManga(mangaData);
-    //adding maga-categories relations
-    await manga.$add('categories', categorie);
+    const manga = await this.mangaService.createManga({
+      ...mangaDetails,
+      author_id: authorId.id,
+      cover_image: book_cover,
+      categorie_name
+    });
+
+    await manga.$add('categories', categoryIds);
 
     return {
       message: 'Manga created succesfully',
@@ -117,10 +112,12 @@ export class MangaController {
 
   @Delete(':uuid')
   async removeManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
-    const { cover_image } = await this.mangaService.findOneManga(uuid);
-    const public_id = cover_image.split('/').pop().split('.')[0];
+    const image_url = await this.mangaService.findOneManga(uuid);
+    if(image_url.cover_image != null){
+      const public_id = image_url.cover_image.split('/').pop().split('.')[0];
+      await this.cloudinaryService.destroyFile(public_id);
+    }
     const deleted  = await this.mangaService.removeManga(uuid);
-    await this.cloudinaryService.destroyFile(public_id);
     if(deleted === 0) throw new BadRequestException('No deleted were made.');  
 
     return {

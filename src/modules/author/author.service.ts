@@ -16,10 +16,10 @@ export class AuthorService {
 
   async createAuthor(body: CreateAuthorDto) {
 
-    const {author_name} = body
+    const { ...authorDetails } = body;
 
     try {
-      return await this.authorModel.findOrCreate({ where: {author_name} });
+      return await this.authorModel.create(authorDetails);
     } catch (error) {
       console.log(error);
       if(error.name === 'SequelizeUniqueConstraintError') throw new BadRequestException(`Register already exist in DB ${ JSON.stringify( error.errors[0].message ) }`)
@@ -30,8 +30,8 @@ export class AuthorService {
     return await this.authorModel.findAll({ include: [Manga] } );
   }
 
-  async findOneAuthor(term: string) {
-    return await this.authorModel.findOne({ where: {author_name: term}, include: [Manga] });
+  async findOneAuthor(uuid: string) {
+    return await this.authorModel.findOne({ where: {id: uuid}, include: [Manga] });
   }
 
   updateAuthor(uuid: string, body: UpdateAuthorDto) {

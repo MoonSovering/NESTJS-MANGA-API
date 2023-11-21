@@ -3,6 +3,7 @@ import { CreateCategorieDto } from './dto/create-categorie.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Categorie } from './entities/categorie.entity';
 import { Manga } from '../manga/entities';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class CategorieService {
@@ -36,6 +37,16 @@ export class CategorieService {
       where: { id: uuid },
       include: [ {model: Manga, through: {attributes: []}} ]
     })
+  }
+
+  async findManyCategory(arrayOfName: string[]){
+    return this.categorieModel.findAll({
+      where: {
+        categorie_name: {
+        [Op.in]: arrayOfName
+        }
+      }
+    });
   }
 
   removeCategory(uuid: string) {

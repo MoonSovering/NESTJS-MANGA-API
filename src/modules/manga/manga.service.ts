@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateMangaDto, UpdateMangaDto } from './dto';
@@ -18,8 +18,14 @@ export class MangaService {
 
   async createManga(body: CreateMangaDto): Promise<Manga>{
 
-    const { author_name, ...mangaDetails } = body; 
-    return await this.mangaModel.create(mangaDetails);
+    const {...mangaDetails} = body;
+    try {
+      return await this.mangaModel.create(mangaDetails);
+    } catch (error) {
+      console.log(error);
+      if(error.name === 'SequelizeUniqueConstraintError') throw new BadRequestException(`Register already exist in DB ${ JSON.stringify( error.errors[0].message ) }`)
+    }
+  
   }
 
   async findAllMangas(): Promise<Manga[]> {

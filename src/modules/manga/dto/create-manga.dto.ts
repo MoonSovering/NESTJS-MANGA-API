@@ -8,8 +8,7 @@ export class CreateMangaDto {
     manga_name: string;
 
     @IsString()
-    @IsOptional()
-    author_name: string;
+    author_id: string;
 
     @MinLength(2, {
         each: true,
@@ -17,10 +16,6 @@ export class CreateMangaDto {
     @IsArray()
     @IsString({ each: true })
     categorie_name: string[];
-
-    @IsString()
-    @IsOptional()
-    authorId: string;
 
     @IsString()
     @IsOptional()

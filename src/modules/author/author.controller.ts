@@ -49,11 +49,11 @@ export class AuthorController {
     }
   }
 
-  @Get(':term')
-  async findOneAuthor(@Param('term') term: string) {
-    const author = await this.authorService.findOneAuthor(term);
+  @Get(':uuid')
+  async findOneAuthor(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const author = await this.authorService.findOneAuthor(uuid);
 
-    if(!author) throw new BadRequestException(`Author with ID ${term} cannot be found`)
+    if(!author) throw new BadRequestException(`Author with ID ${uuid} cannot be found`)
 
     return {
       message: 'Author fetched succesfully',

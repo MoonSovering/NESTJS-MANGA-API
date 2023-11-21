@@ -18,8 +18,8 @@ export class Manga extends Model {
     
     @Column({
         allowNull: false,
-        type: DataType.TEXT
-
+        type: DataType.TEXT,
+        unique: true
     })
     manga_name: string;
 
@@ -30,7 +30,7 @@ export class Manga extends Model {
     cover_image: string;
 
     @ForeignKey( () => Author )
-    authorId: string;
+    author_id: string;
     
     @Column({ 
         allowNull: false,
@@ -42,7 +42,7 @@ export class Manga extends Model {
     @HasMany( () => Chapter )
     chapters: Chapter[]
 
-    @BelongsTo( () => Author, { foreignKey: 'authorId' })
+    @BelongsTo( () => Author, { foreignKey: 'author_id' })
     author: Author
 
     @BelongsToMany( () => Categorie, () => MangaCategorie )
