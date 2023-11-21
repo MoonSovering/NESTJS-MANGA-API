@@ -1,4 +1,4 @@
-import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, BeforeValidate, HasMany  } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, HasMany  } from 'sequelize-typescript';
 
 import { Author } from 'src/modules/author/entities/author.entity';
 import { Categorie, MangaCategorie } from 'src/modules/categorie/entities';

@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException, ParseUUIDPipe } from '@nestjs/common';
 import { ChaptersService } from './chapters.service';
-import { CreateChapterDto } from './dto/create-chapter.dto';
-import { UpdateChapterDto } from './dto/update-chapter.dto';
+import { CreateChapterDto } from './dto';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UnzipService } from '../unzip/unzip.service';

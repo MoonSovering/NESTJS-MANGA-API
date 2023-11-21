@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateAuthorDto, UpdateAuthorDto } from './dto';
 import { Author } from './entities/author.entity';
 import { Manga } from '../manga/entities';
+import { Chapter, Images } from '../chapters/entities';
 
 
 @Injectable()
@@ -26,12 +27,22 @@ export class AuthorService {
     }
   }
 
-  async findAllAuthor() {
-    return await this.authorModel.findAll({ include: [Manga] } );
+  async findAllAuthor( params: {
+    limit: number;
+    offset: number;
+  } ) {
+
+    const { limit, offset } = params;
+
+    return await this.authorModel.findAll({
+      limit,
+      offset,
+      include: [{model: Manga, include: [{model: Chapter, include: [Images]}]}]
+    } );
   }
 
   async findOneAuthor(uuid: string) {
-    return await this.authorModel.findOne({ where: {id: uuid}, include: [Manga] });
+    return await this.authorModel.findOne({ where: {id: uuid}, include: [{model: Manga, include: [{model: Chapter, include: [Images]}]}] });
   }
 
   updateAuthor(uuid: string, body: UpdateAuthorDto) {

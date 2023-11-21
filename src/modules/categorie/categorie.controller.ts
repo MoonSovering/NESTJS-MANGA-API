@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
 import { CategorieService } from './categorie.service';
-import { CreateCategorieDto, UpdateCategorieDto } from './dto';
-import { ParseTransformNamePipe, ParseTransformParamPipe } from 'src/core/pipes/parseTransformName.pipe';
+import { CreateCategorieDto } from './dto';
+import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
 
 
 @Controller('categorie')

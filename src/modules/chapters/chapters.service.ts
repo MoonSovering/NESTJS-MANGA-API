@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChapterDto } from './dto/create-chapter.dto';
-import { UpdateChapterDto } from './dto/update-chapter.dto';
+import { CreateChapterDto } from './dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Chapter, Images } from './entities';
 import { Sequelize } from 'sequelize-typescript';
@@ -34,8 +33,6 @@ export class ChaptersService {
           id_chapter: chapter.id,
           transaction
         }) ));
-
-        console.log(images);
         return {
           chapter
         }

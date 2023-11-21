@@ -1,4 +1,4 @@
-import { BeforeCreate, BeforeUpdate, BeforeValidate, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeUpdate, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Manga } from "src/modules/manga/entities";
 
 

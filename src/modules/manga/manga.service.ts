@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-import { CreateMangaDto, UpdateMangaDto } from './dto';
+import { CreateMangaDto } from './dto';
 
 import { Manga } from './entities/manga.entity';
 import { Author } from '../author/entities/author.entity';

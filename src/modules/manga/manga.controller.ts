@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 
-import { CreateMangaDto, UpdateMangaDto } from './dto';
+import { CreateMangaDto } from './dto';
 import { MangaService } from './manga.service';
 import { ParseTransformNamePipe } from '../../core/pipes/parseTransformName.pipe';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';

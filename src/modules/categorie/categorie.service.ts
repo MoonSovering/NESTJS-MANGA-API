@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategorieDto } from './dto/create-categorie.dto';
+import { CreateCategorieDto } from './dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Categorie } from './entities/categorie.entity';
 import { Manga } from '../manga/entities';
