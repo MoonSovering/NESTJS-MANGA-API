@@ -3,14 +3,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 import { envConfig } from './core/config/env.config';
-import { MangaModule } from './modules/manga/manga.module';
-import { AuthorModule } from './modules/author/author.module';
-import { CategorieModule } from './modules/categorie/categorie.module';
+
 
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
-import { ChaptersModule } from './modules/chapters/chapters.module';
-import { UnzipModule } from './modules/unzip/unzip.module';
+import { CloudinaryModule } from './modules/imageProcessing/cloudinary/cloudinary.module';
+
+import { UnzipModule } from './modules/imageProcessing/unzip/unzip.module';
+import { MangaModule } from './modules/coreManga/manga/manga.module';
+import { AuthorModule } from './modules/coreManga/author/author.module';
+import { CategorieModule } from './modules/coreManga/categorie/categorie.module';
+import { ChaptersModule } from './modules/coreManga/chapters/chapters.module';
 
 
 
