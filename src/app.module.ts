@@ -6,13 +6,15 @@ import { envConfig } from './core/config/env.config';
 
 
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { CloudinaryModule } from './modules/imageProcessing/cloudinary/cloudinary.module';
 
-import { UnzipModule } from './modules/imageProcessing/unzip/unzip.module';
-import { MangaModule } from './modules/coreManga/manga/manga.module';
-import { AuthorModule } from './modules/coreManga/author/author.module';
-import { CategorieModule } from './modules/coreManga/categorie/categorie.module';
-import { ChaptersModule } from './modules/coreManga/chapters/chapters.module';
+import { ResizefileModule } from './modules/image-processing/resizefile/resizefile.module';
+import { MangaModule } from './modules/core-manga/manga/manga.module';
+import { AuthorModule } from './modules/core-manga/author/author.module';
+import { CategorieModule } from './modules/core-manga/categorie/categorie.module';
+import { CloudinaryModule } from './modules/image-processing/cloudinary/cloudinary.module';
+import { ChaptersModule } from './modules/core-manga/chapters/chapters.module';
+import { UnzipModule } from './modules/image-processing/unzip/unzip.module';
+import { ImageProcessingHelperModule } from './modules/image-processing/image-processing-helper/image-processing-helper.module';
 
 
 
@@ -34,7 +36,7 @@ import { ChaptersModule } from './modules/coreManga/chapters/chapters.module';
     ConfigModule.forRoot({
     isGlobal: true,
     load: [envConfig],
-  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule],
+  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule],
 
   controllers: [],
   exports: [SequelizeModule]
