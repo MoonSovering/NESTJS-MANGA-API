@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ZipInterface } from '../unzip/zip.interface';
+import { ResizeFile } from './resize-file.interface';
 const sharp = require('sharp');
 
 @Injectable()
 export class ResizefileService {
 
-  async resizeFile(file: ZipInterface[]) {
+  async resizeFile(file: ResizeFile[]| Express.Multer.File[]) {
     
     const proccesImage = await Promise.all( file.map( async(img) => {
-      const image = await sharp(img.data)
+      const image = await sharp(img.buffer)
       .resize(400, 565)
       .toBuffer();
     

@@ -10,6 +10,7 @@ import { CLOUDINARY_BASE_URL } from 'src/core/Constants/constants';
 import { CategorieService } from '../categorie/categorie.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
+import { ResizefileService } from 'src/modules/image-processing/resizefile/resizefile.service';
 
 @Controller('manga')
 export class MangaController {
@@ -17,7 +18,8 @@ export class MangaController {
     private readonly mangaService: MangaService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly authorService:AuthorService,
-    private readonly categorieService: CategorieService
+    private readonly categorieService: CategorieService,
+    private readonly resizeFileService: ResizefileService
     ) {}
 
   @Post()
@@ -37,10 +39,12 @@ export class MangaController {
     const authorId = await this.authorService.findOneAuthor(author_id);
     if(!authorId) throw new BadRequestException(`Author with ID ${authorId} cannot be found.`)
     const categoryIds = (await this.categorieService.findManyCategory(categorie_name)).map( id => id.id );
+
     if(file){
-        const {format, public_id} = await this.cloudinaryService.uploadFile(file);
-        book_cover = `${CLOUDINARY_BASE_URL}/${public_id}.${format}`
-      }
+      const [resize_image] = await this.resizeFileService.resizeFile([file]);
+      const { secure_url } = await this.cloudinaryService.uploadFile(resize_image);
+      body.cover_image = secure_url;
+    }
     
     const manga = await this.mangaService.createManga({
       ...mangaDetails,

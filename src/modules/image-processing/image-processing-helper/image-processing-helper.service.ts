@@ -24,9 +24,7 @@ export class ImageProcessingHelperService {
           image_url.push(`${CLOUDINARY_BASE_URL}/${public_id}.${format}`);
         }
     
-        return image_url;
+        return zipData;
     }
-
-
 
 }

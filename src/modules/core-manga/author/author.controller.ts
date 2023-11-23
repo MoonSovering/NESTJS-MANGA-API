@@ -7,12 +7,14 @@ import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
 
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { AuthorSearchQueryDto } from './dto/author-search-query.dto';
+import { ResizefileService } from 'src/modules/image-processing/resizefile/resizefile.service';
 
 @Controller('author')
 export class AuthorController {
   constructor(
     private readonly authorService: AuthorService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly resizeFileService: ResizefileService
     ) {}
 
   @Post()
@@ -27,9 +29,11 @@ export class AuthorController {
   ) {
 
     if(file){
-      const { secure_url } = await this.cloudinaryService.uploadFile(file);
-      body.profile_image = secure_url;
-    }
+        const [resize_image] = await this.resizeFileService.resizeFile([file]);
+        const { secure_url } = await this.cloudinaryService.uploadFile(resize_image);
+        body.profile_image = secure_url;
+      }
+
 
     const newAuthor = await this.authorService.createAuthor(body);
 

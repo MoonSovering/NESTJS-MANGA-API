@@ -14,7 +14,11 @@ export class UnzipService {
        }
     });
 
-    return decompressFile;
+    const renameBuffer = decompressFile.map( ({data}) => ({
+      buffer: data
+    }) )
+
+    return renameBuffer;
 
   }
 

@@ -34,22 +34,25 @@ export class ChaptersController {
 
     const dataimg = await this.imageProcessingService.imageProcessing(file);
 
-    const {chapter} = await this.chaptersService.createChapter({
-      id_manga: manga.id,
-      image_url: dataimg,
-      ...chapterDetails
-    })
+    // const {chapter} = await this.chaptersService.createChapter({
+    //   id_manga: manga.id,
+    //   image_url: dataimg,
+    //   ...chapterDetails
+    // })
 
-    const response = {
-      id: chapter.id,
-      id_manga: chapter.id_manga,
-      chapter_name: chapter.chapter_name,
-      chapter_number: chapter.chapter_number
-    }
+    // const response = {
+    //   id: chapter.id,
+    //   id_manga: chapter.id_manga,
+    //   chapter_name: chapter.chapter_name,
+    //   chapter_number: chapter.chapter_number
+    // }
+
+    console.log(dataimg);
 
     return {
       message: 'Chapter created succesfully',
-      chapter: response
+      dataimg
+      // chapter: response
     }
   }
 
