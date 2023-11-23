@@ -9,7 +9,9 @@ export class ResizefileService {
     
     const proccesImage = await Promise.all( file.map( async(img) => {
       const image = await sharp(img.buffer)
-      .resize(400, 565)
+      .resize(400, 565,{
+        fit: 'outside'
+      })
       .toBuffer();
     
       return {
