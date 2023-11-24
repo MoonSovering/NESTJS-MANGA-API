@@ -14,17 +14,22 @@ export class ImageProcessingHelperService {
     ){}
 
     async imageProcessing( file: Express.Multer.File ){
-        const image_url = [];
-        
-        const zipData = await this.unzipService.unzipFile(file);
-        const imageProcces = await this.resizeFileService.resizeFile(zipData);
+      const images_url = [];
+
+      if(file.mimetype != 'application/zip') {
+        const [singleImage] = await this.resizeFileService.resizeFile([file]);
+        const {public_id, format} = await this.cloudinaryService.uploadFile(singleImage);
+        images_url.push(`${CLOUDINARY_BASE_URL}/${public_id}.${format}`);
+      }
+        const zipImagesData = await this.unzipService.unzipFile(file);
+        const reduceSizeImage = await this.resizeFileService.resizeFile(zipImagesData);
     
-        for await (const data of imageProcces){
+        for await (const data of reduceSizeImage){
           const {public_id, format} = await this.cloudinaryService.uploadFile(data);
-          image_url.push(`${CLOUDINARY_BASE_URL}/${public_id}.${format}`);
+          images_url.push(`${CLOUDINARY_BASE_URL}/${public_id}.${format}`);
         }
     
-        return zipData;
+        return images_url;
     }
 
 }

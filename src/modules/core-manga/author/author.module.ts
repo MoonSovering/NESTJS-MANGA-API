@@ -3,15 +3,14 @@ import { SequelizeModule } from '@nestjs/sequelize';
 
 import { AuthorService } from './author.service';
 import { AuthorController } from './author.controller';
-
 import { Author } from './entities/author.entity';
-import { CloudinaryModule } from 'src/modules/image-processing/cloudinary/cloudinary.module';
-import { ResizefileModule } from 'src/modules/image-processing/resizefile/resizefile.module';
+
+import { ImageProcessingHelperModule } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.module';
 
 
 
 @Module({
-  imports:[ SequelizeModule.forFeature([Author]), CloudinaryModule, ResizefileModule ],
+  imports:[ SequelizeModule.forFeature([Author]), ImageProcessingHelperModule ],
   controllers: [AuthorController],
   providers: [AuthorService],
   exports: [AuthorService]

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { envConfig } from './core/config/env.config';
-
-
 import { NestjsFormDataModule } from 'nestjs-form-data';
+
+import { envConfig } from './core/config/env.config';
+import { databaseConfigFactory } from './core/config/database-config';
 
 import { ResizefileModule } from './modules/image-processing/resizefile/resizefile.module';
 import { MangaModule } from './modules/core-manga/manga/manga.module';
@@ -17,20 +17,11 @@ import { UnzipModule } from './modules/image-processing/unzip/unzip.module';
 import { ImageProcessingHelperModule } from './modules/image-processing/image-processing-helper/image-processing-helper.module';
 
 
-
 @Module({
   imports: [ 
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        dialect: 'postgres',
-        port: +configService.get(process.env.DBPORT),
-        username: 'sovering',
-        password: 'Urranrell318',
-        database: configService.get(process.env.DATABASE),
-        synchronize: true,
-        autoLoadModels: true
-      }),
+      useFactory: databaseConfigFactory,
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({

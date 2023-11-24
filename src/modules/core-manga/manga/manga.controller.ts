@@ -1,17 +1,20 @@
 import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
+
+import { Manga } from './entities';
 import { CreateMangaDto, MangaSearchQueryDto } from './dto';
 import { MangaService } from './manga.service';
-
 import { AuthorService } from '../author/author.service';
-import { CLOUDINARY_BASE_URL } from 'src/core/Constants/constants';
 import { CategorieService } from '../categorie/categorie.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
+import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
-import { ResizefileService } from 'src/modules/image-processing/resizefile/resizefile.service';
 
+
+@ApiTags('Mangas')
 @Controller('manga')
 export class MangaController {
   constructor(
@@ -19,10 +22,16 @@ export class MangaController {
     private readonly cloudinaryService: CloudinaryService,
     private readonly authorService:AuthorService,
     private readonly categorieService: CategorieService,
-    private readonly resizeFileService: ResizefileService
+    private readonly imageProcessingService: ImageProcessingHelperService
     ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new manga',
+    description: 'Create a new manga'
+  })
+  @ApiResponse({ status: 201, description: 'Mangas created succesfully', type: Manga })
+  @ApiResponse({ status: 400, description: 'Manga already exits in database' })
   @UseInterceptors(FileInterceptor('cover_image'))
   async createManga(
     @Body(ParseTransformNamePipe) body: CreateMangaDto,
@@ -34,22 +43,16 @@ export class MangaController {
     ) file: Express.Multer.File
     ) {
 
-    let book_cover = ''
-    const { author_id, cover_image, categorie_name = [],...mangaDetails } = body;
+    if(file) [body.cover_image] = await this.imageProcessingService.imageProcessing(file);
+    const { author_id, categorie_name = [],...mangaDetails } = body;
     const authorId = await this.authorService.findOneAuthor(author_id);
     if(!authorId) throw new BadRequestException(`Author with ID ${authorId} cannot be found.`)
     const categoryIds = (await this.categorieService.findManyCategory(categorie_name)).map( id => id.id );
 
-    if(file){
-      const [resize_image] = await this.resizeFileService.resizeFile([file]);
-      const { secure_url } = await this.cloudinaryService.uploadFile(resize_image);
-      body.cover_image = secure_url;
-    }
     
     const manga = await this.mangaService.createManga({
       ...mangaDetails,
       author_id: authorId.id,
-      cover_image: book_cover,
       categorie_name
     });
 
@@ -63,6 +66,12 @@ export class MangaController {
 
 
   @Get()
+  @ApiOperation({
+    summary: 'Get all mangas',
+    description: 'Get all mangas'
+  })
+  @ApiResponse({ status: 200, description: 'Mangas fetched succesfully', type: [Manga] })
+  @ApiResponse({ status: 400, description: 'No manga found in the manga list.' })
   async findAllMangas(@Query() query: MangaSearchQueryDto) {
 
     const { limit, offset } = query;
@@ -96,6 +105,12 @@ export class MangaController {
   }
 
   @Get(':uuid')
+  @ApiOperation({
+    summary: 'Get one manga by ID(uuid)',
+    description: 'Get one manga by ID(uuid)'
+  })
+  @ApiResponse({ status: 200, description: 'Manga fetched succesfully', type: [Manga] })
+  @ApiResponse({ status: 400, description: 'No cannot be found' })
   async findOneManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const result = await this.mangaService.findOneManga(uuid);
 
@@ -122,6 +137,12 @@ export class MangaController {
   }
 
   @Delete(':uuid')
+  @ApiOperation({
+    summary: 'Deleted one manga by ID(uuid)',
+    description: 'Deleted one manga by ID(uuid)'
+  })
+  @ApiResponse({ status: 200, description: 'Manga deleted succesfully'})
+  @ApiResponse({ status: 400, description: 'No deleted were made.' })
   async removeManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const image_url = await this.mangaService.findOneManga(uuid);
     if(image_url.cover_image != null){

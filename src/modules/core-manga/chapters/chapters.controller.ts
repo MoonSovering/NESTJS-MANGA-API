@@ -1,14 +1,17 @@
 import { Controller, Get, Post, Body, Param, Delete, UploadedFile, ParseFilePipe, FileTypeValidator, UseInterceptors, BadRequestException, ParseUUIDPipe, Query } from '@nestjs/common';
-import { ChaptersService } from './chapters.service';
-import { ChapterSeaarchQueryDto, CreateChapterDto } from './dto';
-
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+
+import { Chapter } from './entities';
+import { ChapterSearchQueryDto, CreateChapterDto } from './dto';
+import { ChaptersService } from './chapters.service';
 import { MangaService } from '../manga/manga.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 
-@Controller('chapters')
+@ApiTags('Chapters')
+@Controller('chapter')
 export class ChaptersController {
   constructor(
     private readonly chaptersService: ChaptersService,
@@ -18,6 +21,12 @@ export class ChaptersController {
     ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new chapter',
+    description: 'Create a new chapter'
+  })
+  @ApiResponse({ status: 201, description: 'Category created succesfully', type: Chapter })
+  @ApiResponse({ status: 400, description: 'Bad request'})
   @UseInterceptors(FileInterceptor('chapter'))
   async create(@Body() body: CreateChapterDto,
   @UploadedFile(
@@ -34,30 +43,35 @@ export class ChaptersController {
 
     const dataimg = await this.imageProcessingService.imageProcessing(file);
 
-    // const {chapter} = await this.chaptersService.createChapter({
-    //   id_manga: manga.id,
-    //   image_url: dataimg,
-    //   ...chapterDetails
-    // })
+    const {chapter} = await this.chaptersService.createChapter({
+      id_manga: manga.id,
+      image_url: dataimg,
+      ...chapterDetails
+    })
 
-    // const response = {
-    //   id: chapter.id,
-    //   id_manga: chapter.id_manga,
-    //   chapter_name: chapter.chapter_name,
-    //   chapter_number: chapter.chapter_number
-    // }
+    const response = {
+      id: chapter.id,
+      id_manga: chapter.id_manga,
+      chapter_name: chapter.chapter_name,
+      chapter_number: chapter.chapter_number
+    }
 
     console.log(dataimg);
 
     return {
       message: 'Chapter created succesfully',
-      dataimg
-      // chapter: response
+      chapter: response
     }
   }
 
   @Get()
-  async findAllChapters(@Query() query: ChapterSeaarchQueryDto) {
+  @ApiOperation({
+    summary: 'Get all chapters',
+    description: 'Get all chapters'
+  })
+  @ApiResponse({ status: 200, description: 'Chapters fetched succesfully', type: [Chapter] })
+  @ApiResponse({ status: 400, description: 'No chapter found in the chapters list.' })
+  async findAllChapters(@Query() query: ChapterSearchQueryDto) {
 
     const { limit, offset } = query;
 
@@ -83,6 +97,12 @@ export class ChaptersController {
   }
 
   @Get(':uuid')
+  @ApiOperation({
+    summary: 'Get one chapter by ID(uuid)',
+    description: 'Get one chapter by ID(uuid)'
+  })
+  @ApiResponse({ status: 200, description: 'Chapter fetched succesfully', type: [Chapter] })
+  @ApiResponse({ status: 400, description: 'Chapter cannot be found' })
   async findOneChapter(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const result =  await this.chaptersService.findOneChapter(uuid);
 
@@ -102,6 +122,12 @@ export class ChaptersController {
   }
 
   @Delete(':uuid')
+  @ApiOperation({
+    summary: 'Deleted one chapter by ID(uuid)',
+    description: 'Deleted one chapter by ID(uuid)'
+  })
+  @ApiResponse({ status: 200, description: 'Chapter deleted succesfully'})
+  @ApiResponse({ status: 400, description: 'No deleted were made.' })
   async removeChapter(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const { images } = await this.chaptersService.findOneChapter(uuid);
 

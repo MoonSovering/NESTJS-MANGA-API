@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategorieDto } from './dto';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
+
+import { CreateCategorieDto } from './dto';
 import { Categorie } from './entities/categorie.entity';
 import { Manga } from '../manga/entities';
-import { Op } from 'sequelize';
 
 @Injectable()
 export class CategorieService {

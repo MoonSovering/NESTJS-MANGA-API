@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChapterDto } from './dto';
 import { InjectModel } from '@nestjs/sequelize';
-import { Chapter, Images } from './entities';
 import { Sequelize } from 'sequelize-typescript';
+
+import { CreateChapterDto } from './dto';
+import { Chapter, Images } from './entities';
 
 @Injectable()
 export class ChaptersService {

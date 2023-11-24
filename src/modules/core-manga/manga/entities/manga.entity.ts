@@ -1,4 +1,6 @@
 import { Model, Table, Column, DataType, BelongsTo, ForeignKey, BelongsToMany, BeforeCreate, BeforeUpdate, HasMany  } from 'sequelize-typescript';
+import { ApiProperty } from '@nestjs/swagger';
+
 import { Author } from '../../author/entities/author.entity';
 import { Chapter } from '../../chapters/entities';
 import { Categorie, MangaCategorie } from '../../categorie/entities';
@@ -9,6 +11,11 @@ import { Categorie, MangaCategorie } from '../../categorie/entities';
 @Table
 export class Manga extends Model {
 
+    @ApiProperty({
+        example: '5b09dad7-4473-4311-83b2-ab32a48d6023',
+        description: 'The ID(uuid) of the manga',
+        uniqueItems: true
+    })
     @Column({
         primaryKey: true,
         allowNull: false,
@@ -17,6 +24,11 @@ export class Manga extends Model {
     })
     id: string;
     
+    @ApiProperty({
+        example: 'Naruto',
+        description: 'Name of manga to create',
+        uniqueItems: true
+    })
     @Column({
         allowNull: false,
         type: DataType.TEXT,
@@ -24,15 +36,30 @@ export class Manga extends Model {
     })
     manga_name: string;
 
+    @ApiProperty({
+        example: 'MyImage.jpg',
+        description: 
+        'Cover image of the manga | Max size: ?| Allowed types: png, jpg, jpeg',
+    })
     @Column({
         allowNull: true,
         type: DataType.STRING
     })
     cover_image: string;
 
+    @ApiProperty({
+        example: '5ccd7a71-faea-4e94-ba02-ca6fa1121381',
+        description: 'The ID(uuid) of the author',
+        uniqueItems: true
+    })
     @ForeignKey( () => Author )
     author_id: string;
     
+    @ApiProperty({
+        example: true,
+        description: 'Show the status of the manga, if status is false manga will be hidde',
+        default: true
+    })
     @Column({ 
         allowNull: false,
         type: DataType.BOOLEAN,

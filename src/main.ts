@@ -1,20 +1,16 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
+import { swaggerConfig } from './core/config/swagger-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const config = new DocumentBuilder()
-    .setTitle('Manga API')
-    .setDescription('A nestjs API that shows mangas')
-    .setVersion('1.0')
-    .addTag('BeingUrra')
-    .build()
+  app.setGlobalPrefix('api')
   
-  const document = SwaggerModule.createDocument( app, config );
-  SwaggerModule.setup('api', app, document);
+  const document = SwaggerModule.createDocument( app, swaggerConfig );
+  SwaggerModule.setup('api/docs', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -22,10 +18,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
     )
-
-  app.setGlobalPrefix('api')
-
-
+    
     await app.listen(process.env.PORT);
 }
 bootstrap();
