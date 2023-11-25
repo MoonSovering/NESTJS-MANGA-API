@@ -44,4 +44,4 @@ jobs:
       -
         name: Deploy to AWS Lambda
         run: |
-          aws lambda update-function-code --function-name $ECR_REPOSITORY --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          aws lambda update-function-code --function-name ${{ env.ECR_REPOSITORY }} --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
