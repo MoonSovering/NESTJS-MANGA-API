@@ -1,5 +1,5 @@
 
-name: docker-deploy-aws
+name: docker-deploy-lambda
 
 on:
   push:
