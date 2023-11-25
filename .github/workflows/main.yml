@@ -1,0 +1,47 @@
+
+name: DockerBuild
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ECR_IMAGE_TAG: latest
+      AWS_DEFAULT_REGION: us-east-1
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+      name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCES_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCES_KEY }}
+        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      
+      -
+      name: Login to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+      -
+      name: Build and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: manga-api
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -f ./Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      -
+        name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code --function-name $ECR_REPOSITORY --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
