@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { NestjsFormDataModule } from 'nestjs-form-data';
-
 import { envConfig } from './core/config/env.config';
 import { databaseConfigFactory } from './core/config/database-config';
 
@@ -27,7 +25,7 @@ import { ImageProcessingHelperModule } from './modules/image-processing/image-pr
     ConfigModule.forRoot({
     isGlobal: true,
     load: [envConfig],
-  }), MangaModule, AuthorModule, NestjsFormDataModule.config({isGlobal: true}), CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule],
+  }), MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule],
 
   controllers: [],
   exports: [SequelizeModule]

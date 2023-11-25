@@ -31,7 +31,6 @@
     "class-validator": "^0.14.0",
     "cloudinary": "^1.41.0",
     "decompress": "^4.2.1",
-    "nestjs-form-data": "^1.9.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
