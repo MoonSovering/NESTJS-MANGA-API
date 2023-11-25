@@ -1,5 +1,5 @@
 
-name: DockerBuild
+name: docker-build-deploy
 
 on:
   push:
