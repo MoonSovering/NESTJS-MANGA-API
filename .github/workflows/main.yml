@@ -43,5 +43,7 @@ jobs:
 
       -
         name: Deploy to AWS Lambda
+        env:
+          LAMBDA_NAME: lessmanga
         run: |
-          aws lambda update-function-code --function-name ${{ env.ECR_REPOSITORY }} --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          aws lambda update-function-code --function-name $LAMBDA_NAME --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
