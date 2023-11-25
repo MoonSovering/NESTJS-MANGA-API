@@ -24,6 +24,8 @@ COPY package.json yarn.lock ./
 RUN yarn install --prod
 
 COPY --from=builder /app/dist ./dist
+RUN mkdir -p ./manga-api
+
 
 
 RUN adduser --disabled-password mangauser
