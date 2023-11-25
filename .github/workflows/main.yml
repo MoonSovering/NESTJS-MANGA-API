@@ -48,4 +48,4 @@ jobs:
         run: |
           aws lambda update-function-code  \
           --function-name ${{ env.LAMBDA_NAME }} \
-          --image-uri ${{ secrets.IMAGE_URI }}:${{ env.IMAGE_TAG }}
+          --image-uri "${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
