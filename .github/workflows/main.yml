@@ -44,6 +44,8 @@ jobs:
       -
         name: Deploy to AWS Lambda
         run: |
-          aws lambda update-function-code --function-name ${{ env.LAMBDA_NAME }} --image-uri "${{ secrets.AWS_ECR_IMAGE_URI }}:${{ env.ECR_DEFAULT_TAG }}"
+          aws lambda update-function-code --function-name ${{ env.LAMBDA_NAME }} --image-uri "${{ env.AWS_ECR_IMAGE_URI }}:${{ env.IMAGE_TAG }}"
         env:
           LAMBDA_NAME: lessmanga
+          AWS_ECR_IMAGE_URI: https://990307636431.dkr.ecr.us-east-1.amazonaws.com/manga-api
+          IMAGE_TAG: ${{ github.sha }}
