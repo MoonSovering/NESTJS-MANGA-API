@@ -1,5 +1,5 @@
 
-name: docker-build-deploy
+name: docker-deploy-lambda
 
 on:
   push:
