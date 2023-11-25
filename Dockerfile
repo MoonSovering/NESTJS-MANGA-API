@@ -1,16 +1,37 @@
 
-FROM node:18-alpine
+# Save package in cache
+FROM node:alpine3.16 AS deps
+
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+
+FROM node:alpine3.16 AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN yarn build
+
+
+FROM node:alpine3.16 AS runner
 
 WORKDIR /user/src/app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --omit=dev
+RUN yarn install --prod
 
-COPY . .
+COPY --from=builder /app/dist ./dist
+RUN mkdir -p ./manga-api
 
-RUN yarn build
+COPY --from=builder ./app/dist/ ./app
+COPY ./.env ./app/.env
 
-USER node
 
-CMD [ "yarn", "run", "start:prod" ]
+RUN adduser --disabled-password mangauser
+RUN chown -R mangauser:mangauser ./manga-api
+USER mangauser
+
+CMD [ "node", "dist/main" ]

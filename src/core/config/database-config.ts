@@ -5,6 +5,7 @@ import { Dialect } from "sequelize";
 export const databaseConfigFactory = (configService: ConfigService) => ({
     dialect: 'postgres' as Dialect,
     port: +configService.get('DBPORT'),
+    host: configService.get('DBHOST'),
     username: configService.get('DBUSER'),
     password: configService.get('DBPASSWORD'),
     database: configService.get('DATABASE'),
