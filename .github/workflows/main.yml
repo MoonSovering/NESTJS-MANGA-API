@@ -1,5 +1,5 @@
 
-name: docker-deploy-lambda
+name: docker-deploy-aws
 
 on:
   push:
@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ECR_IMAGE_TAG: latest
       AWS_DEFAULT_REGION: us-east-1
 
     steps:
