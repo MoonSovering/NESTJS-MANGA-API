@@ -20,7 +20,6 @@ FROM node:alpine3.16 AS runner
 WORKDIR /user/src/app
 
 COPY package.json yarn.lock ./
-COPY .env ./
 
 ENV NODE_ENV=production
 
