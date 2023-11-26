@@ -4,8 +4,6 @@ version: '3.1'
 
 services:
   mangaxapp:
-    depends_on:
-      - db
     build: 
       context: .
       dockerfile: Dockerfile
@@ -16,23 +14,11 @@ services:
       - "${PORT}:${PORT}"
     environment:
       PORT: ${PORT}
-      DBHOST: db
-      DBPORT: ${DBPORT}
-      DBUSER: ${DBUSER}
-      DBPASSWORD: ${DBPASSWORD}
-      DATABASE: ${DATABASE}
+      DBHOST: ${RDS_DATABASE_HOST}
+      DBPORT: ${RDS_DATABASE_PORT}
+      DBUSER: ${RDS_DATABASE_USER}
+      DBPASSWORD: ${RDS_DATABASE_PASSWORD}
+      DATABASE: ${DATABASE_NAME}
       CLOUDINARY_NAME: ${CLOUDINARY_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-
-  db:
-    image: postgres:15.1
-    container_name: postgres-manga
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: ${DBPASSWORD}
-      POSTGRES_USER: ${DBUSER}
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
-    ports:
-      - 5432:5432

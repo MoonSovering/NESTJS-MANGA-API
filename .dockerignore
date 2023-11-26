@@ -3,3 +3,4 @@ dist/
 .gitignore
 .git/
 docker.env
+**/*.env

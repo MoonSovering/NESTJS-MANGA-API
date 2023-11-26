@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { envConfig } from './core/config/env.config';
-import { databaseConfigFactory } from './core/config/database-config';
+import { databaseConfigFactory, validationSchema } from './core/config';
 
 import { ResizefileModule } from './modules/image-processing/resizefile/resizefile.module';
 import { MangaModule } from './modules/core-manga/manga/manga.module';
@@ -24,7 +23,8 @@ import { ImageProcessingHelperModule } from './modules/image-processing/image-pr
     }),
     ConfigModule.forRoot({
     isGlobal: true,
-    load: [envConfig],
+    envFilePath: `src/core/env/${process.env.NODE_ENV}.env`,
+    validationSchema
   }), MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule],
 
   controllers: [],

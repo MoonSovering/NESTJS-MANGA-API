@@ -1,4 +1,18 @@
+import * as Joi from 'joi';
 
-export const envConfig = () => ( {
-    port: parseInt(process.env.PORT, 10) || 1200,
-});
+enum Environment {
+    Development = 'development',
+    Production = 'production',
+    Test = 'test',
+    Provision = 'provision',
+  }
+
+
+export const validationSchema = Joi.object({
+    NODE_ENV: Joi.string()
+        .valid(...Object.values(Environment))
+        .default(Environment.Development),
+    PORT: Joi.number().default(3000)
+    
+})
+  
