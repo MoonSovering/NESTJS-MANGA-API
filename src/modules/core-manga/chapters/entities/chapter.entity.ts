@@ -48,7 +48,7 @@ export class Chapter extends Model{
         uniqueItems: true
     })
     @ForeignKey( () => Manga )
-    id_manga: string
+    manga_name: string
 
     @BelongsTo( () => Manga )
     chapters: Chapter

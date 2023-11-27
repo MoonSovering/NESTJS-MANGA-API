@@ -45,6 +45,12 @@ export class AuthorService {
     return await this.authorModel.findOne({ where: {id: uuid}, include: [{model: Manga, include: [{model: Chapter, include: [Images]}]}] });
   }
 
+  async findOneAuthorId(name: string){
+    return await this.authorModel.findOne({
+      where: {author_name: name}
+    })
+  }
+
   updateAuthor(uuid: string, body: UpdateAuthorDto) {
     return this.authorModel.update(body, {where: {id: uuid}, returning: true});
   }

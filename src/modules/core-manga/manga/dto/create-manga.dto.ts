@@ -14,12 +14,12 @@ export class CreateMangaDto {
     manga_name: string;
 
     @ApiProperty({
-        example: '5ccd7a71-faea-4e94-ba02-ca6fa1121381',
-        description: 'The ID(uuid) of the author',
+        example: 'moon sovering',
+        description: 'The name of the author',
         uniqueItems: true
     })
     @IsString()
-    author_id: string;
+    author_name: string;
 
     @ApiProperty({
         example: '["Action", "Mystery", "Horror", "Romance"]',

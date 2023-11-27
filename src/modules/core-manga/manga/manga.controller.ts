@@ -11,7 +11,7 @@ import { AuthorService } from '../author/author.service';
 import { CategorieService } from '../categorie/categorie.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
-import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
+import { ParseTransformArrayPipe, ParseTransformNamePipe } from 'src/core/pipes';
 
 
 @ApiTags('Mangas')
@@ -34,7 +34,7 @@ export class MangaController {
   @ApiResponse({ status: 400, description: 'Manga already exits in database' })
   @UseInterceptors(FileInterceptor('cover_image'))
   async createManga(
-    @Body(ParseTransformNamePipe) body: CreateMangaDto,
+    @Body(ParseTransformNamePipe, ParseTransformArrayPipe ) body: CreateMangaDto,
     @UploadedFile(
       new ParseFilePipe({
         validators: [ new FileTypeValidator({ fileType: '.(png|jpg|jpeg)' }) ],
@@ -44,23 +44,28 @@ export class MangaController {
     ) {
 
     if(file) [body.cover_image] = await this.imageProcessingService.imageProcessing(file);
-    const { author_id, categorie_name = [],...mangaDetails } = body;
-    const authorId = await this.authorService.findOneAuthor(author_id);
-    if(!authorId) throw new BadRequestException(`Author with ID ${authorId} cannot be found.`)
+    const { author_name, categorie_name = [],...mangaDetails } = body;
+    const isValidAuthor = await this.authorService.findOneAuthorId(author_name);
+    if(!isValidAuthor) throw new BadRequestException(`Author with name ${author_name} cannot be found.`)
     const categoryIds = (await this.categorieService.findManyCategory(categorie_name)).map( id => id.id );
-
     
     const manga = await this.mangaService.createManga({
       ...mangaDetails,
-      author_id: authorId.id,
+      author_name: isValidAuthor.id,
       categorie_name
     });
+
+    const response = {
+      id: manga.id,
+      manga_name: manga.manga_name,
+      cover_image: manga.cover_image
+    }
 
     await manga.$add('categories', categoryIds);
 
     return {
       message: 'Manga created succesfully',
-      data: manga
+      data: response
     }
   }
 
@@ -110,7 +115,7 @@ export class MangaController {
     description: 'Get one manga by ID(uuid)'
   })
   @ApiResponse({ status: 200, description: 'Manga fetched succesfully', type: [Manga] })
-  @ApiResponse({ status: 400, description: 'No cannot be found' })
+  @ApiResponse({ status: 400, description: 'Manga cannot be found' })
   async findOneManga(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const result = await this.mangaService.findOneManga(uuid);
 

@@ -48,12 +48,12 @@ export class Manga extends Model {
     cover_image: string;
 
     @ApiProperty({
-        example: '5ccd7a71-faea-4e94-ba02-ca6fa1121381',
-        description: 'The ID(uuid) of the author',
+        example: 'Moon sovering',
+        description: 'The name of the author',
         uniqueItems: true
     })
     @ForeignKey( () => Author )
-    author_id: string;
+    author_name: string;
     
     @ApiProperty({
         example: true,
@@ -70,7 +70,7 @@ export class Manga extends Model {
     @HasMany( () => Chapter )
     chapters: Chapter[]
 
-    @BelongsTo( () => Author, { foreignKey: 'author_id' })
+    @BelongsTo( () => Author, { foreignKey: 'author_name' })
     author: Author
 
     @BelongsToMany( () => Categorie, () => MangaCategorie )

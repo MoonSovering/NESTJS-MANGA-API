@@ -10,7 +10,7 @@ export class CreateChapterDto {
         uniqueItems: true
     })
     @IsString()
-    id_manga: string;
+    manga_name: string;
 
     @ApiProperty({
         example: 10,

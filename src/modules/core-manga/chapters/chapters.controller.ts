@@ -9,6 +9,7 @@ import { ChaptersService } from './chapters.service';
 import { MangaService } from '../manga/manga.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
+import { ParseTransformNamePipe } from 'src/core/pipes';
 
 @ApiTags('Chapters')
 @Controller('chapter')
@@ -28,7 +29,7 @@ export class ChaptersController {
   @ApiResponse({ status: 201, description: 'Category created succesfully', type: Chapter })
   @ApiResponse({ status: 400, description: 'Bad request'})
   @UseInterceptors(FileInterceptor('chapter'))
-  async create(@Body() body: CreateChapterDto,
+  async create(@Body(ParseTransformNamePipe) body: CreateChapterDto,
   @UploadedFile(
     new ParseFilePipe({
       validators: [ new FileTypeValidator({ fileType: '.(zip)' }) ],
@@ -36,22 +37,22 @@ export class ChaptersController {
     })
   ) file: Express.Multer.File) {
 
-    const { id_manga, image_url = [], ...chapterDetails} = body;
+    const { manga_name, image_url = [], ...chapterDetails} = body;
 
-    const manga = await this.mangaService.findOneManga(id_manga);
-    if(!manga) throw new BadRequestException(`Manga with ID ${id_manga} cannot be found.`)
+    const manga = await this.mangaService.findOneMangaId(manga_name);
+    if(!manga) throw new BadRequestException(`Manga with ID ${manga_name} cannot be found.`)
 
     const dataimg = await this.imageProcessingService.imageProcessing(file);
 
     const {chapter} = await this.chaptersService.createChapter({
-      id_manga: manga.id,
+      manga_name: manga.id,
       image_url: dataimg,
       ...chapterDetails
     })
 
     const response = {
       id: chapter.id,
-      id_manga: chapter.id_manga,
+      manga_name,
       chapter_name: chapter.chapter_name,
       chapter_number: chapter.chapter_number
     }

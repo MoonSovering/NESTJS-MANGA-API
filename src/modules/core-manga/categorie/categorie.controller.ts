@@ -4,7 +4,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Categorie } from './entities';
 import { CreateCategorieDto, CategorySearchQueryDto } from './dto';
 import { CategorieService } from './categorie.service';
-import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
+import { ParseTransformArrayPipe } from 'src/core/pipes';
 
 @ApiTags('Categories')
 @Controller('categorie')
@@ -17,7 +17,7 @@ export class CategorieController {
     description: 'Create a new category'
   })
   @ApiResponse({ status: 201, description: 'Category created succesfully', type: Categorie })
-  async create(@Body(ParseTransformNamePipe) body: CreateCategorieDto) {
+  async create(@Body(ParseTransformArrayPipe) body: CreateCategorieDto) {
     const result = await this.categorieService.createCategorie(body)
     return {
       message: 'Categories created succesfully',

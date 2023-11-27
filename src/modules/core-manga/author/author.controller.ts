@@ -6,7 +6,7 @@ import { Author } from './entities/author.entity';
 import { CreateAuthorDto, UpdateAuthorDto, AuthorSearchQueryDto } from './dto';
 import { AuthorService } from './author.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
-import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
+import { ParseTransformNamePipe } from 'src/core/pipes';
 
 @ApiTags('Authors')
 @Controller('author')

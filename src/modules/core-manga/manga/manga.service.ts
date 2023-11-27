@@ -48,7 +48,7 @@ export class MangaService {
   }
 
   async findOneManga(uuid: string): Promise<Manga> {
-    return this.mangaModel.findOne({
+    return await this.mangaModel.findOne({
       where:  {id: uuid}, 
       include: [
         { model: Author },
@@ -56,6 +56,12 @@ export class MangaService {
         {model: Chapter, include: [Images]}
       ]
     });
+  }
+
+  async findOneMangaId (name: string){
+    return await this.mangaModel.findOne({
+      where: {manga_name: name}
+    })
   }
 
   async removeManga(uuid: string): Promise<number> {

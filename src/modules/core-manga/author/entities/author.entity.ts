@@ -29,7 +29,7 @@ export class Author extends Model {
     })
     @Column({
         allowNull: false,
-        type: DataType.TEXT,
+        type: DataType.STRING,
         unique: true
     })
     author_name: string;
