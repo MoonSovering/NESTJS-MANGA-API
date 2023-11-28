@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -7,6 +7,8 @@ import { CreateAuthorDto, UpdateAuthorDto, AuthorSearchQueryDto } from './dto';
 import { AuthorService } from './author.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformNamePipe } from 'src/core/pipes';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/modules/user-management/authorization/guards/jwt-auth.guard';
 
 @ApiTags('Authors')
 @Controller('author')
@@ -134,6 +136,7 @@ export class AuthorController {
   }
 
   @Delete(':uuid')
+  @UseGuards(AuthGuard('access_token'))
   @ApiOperation({
     summary: 'Deleted one author by ID(uuid)',
     description: 'Deleted one author by ID(uuid)'

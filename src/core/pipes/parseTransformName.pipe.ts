@@ -15,6 +15,10 @@ export class ParseTransformNamePipe implements PipeTransform {
       value.chapter_name.toLowerCase().replace(/\s+/g, '_');
     }
 
+    if(value.username) {
+      value.username.toLowerCase().replace(/\s+/g, '_');
+    }
+
     return value;
   }
 }

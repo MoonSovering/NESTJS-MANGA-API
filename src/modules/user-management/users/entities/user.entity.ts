@@ -29,7 +29,7 @@ export class User extends Model {
         allowNull: false,
         type: DataType.STRING,
     })
-    password: string;
+    hash_password: string;
 
     @BeforeUpdate
     @BeforeCreate

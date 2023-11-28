@@ -8,6 +8,7 @@ import { EncrypterService } from 'src/core/services/encrypter/encrypter.service'
 @Module({
   controllers: [UsersController],
   providers: [UsersService, EncrypterService],
-  imports: [ SequelizeModule.forFeature([User]) ]
+  imports: [ SequelizeModule.forFeature([User]) ],
+  exports: [UsersService]
 })
 export class UsersModule {}

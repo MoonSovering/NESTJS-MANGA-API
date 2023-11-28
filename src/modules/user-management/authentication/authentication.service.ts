@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthenticationDto } from './dto/create-authentication.dto';
-import { UpdateAuthenticationDto } from './dto/update-authentication.dto';
+import { UsersService } from '../users/users.service';
+import { EncrypterService } from 'src/core/services/encrypter/encrypter.service';
 
 @Injectable()
 export class AuthenticationService {
-  create(createAuthenticationDto: CreateAuthenticationDto) {
-    return 'This action adds a new authentication';
-  }
 
-  findAll() {
-    return `This action returns all authentication`;
-  }
+  constructor(
+    private readonly userService: UsersService,
+    private readonly encrypterService: EncrypterService
+  ){}
 
-  findOne(id: number) {
-    return `This action returns a #${id} authentication`;
-  }
+  async validateUser( email: string, password: string ){
+    
+    const userExist = await this.userService.findOneUser(email);
+    if(!userExist) {
+      return null
+    }
 
-  update(id: number, updateAuthenticationDto: UpdateAuthenticationDto) {
-    return `This action updates a #${id} authentication`;
-  }
+    const isValidPassword = await this.encrypterService.comparePassword( 
+      password,
+      userExist.hash_password
+     );
 
-  remove(id: number) {
-    return `This action removes a #${id} authentication`;
+    if(isValidPassword){
+      return userExist;
+    }
+    return null
   }
 }

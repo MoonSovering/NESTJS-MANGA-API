@@ -14,7 +14,7 @@ export class UsersController {
   @Post()
   async createUser(@Body() body: CreateUserDto) {
 
-    const { username, email, password } = body;
+    const { username, email, hash_password } = body;
 
     const isValidUser = await this.usersService.findOneUser(email);
     if(isValidUser) throw new BadRequestException({
@@ -22,12 +22,12 @@ export class UsersController {
       message: 'User already exists',
     });
 
-    const password_hash = await this.encrypterService.hashPassword(password);
+    const password_hash = await this.encrypterService.hashPassword(hash_password);
 
     const newUser = await this.usersService.createUser({
       username,
       email,
-      password: password_hash
+      hash_password: password_hash
     });
 
     const response = {
@@ -70,16 +70,28 @@ export class UsersController {
   @Patch(':uuid')
   async updateUser(@Param('uuid', new ParseUUIDPipe()) uuid: string, @Body(ParseTransformNamePipe) body: UpdateUserDto) {
 
-    const {email, password, username} = body;
+    const isValidUser = await this.usersService.findOneUserById(uuid);
 
-    // const password_hash = await this.encrypterService.hashPassword(password);
+    if(!isValidUser) throw new BadRequestException(`User with ID ${uuid} cannot be found.`)
 
-    // console.log(password_hash);
-    return this.usersService.updateUser(uuid, {
+    const {email, hash_password, username} = body;
+
+    const user = await this.usersService.updateUser(uuid, {
       email,
       username,
-      password
+      hash_password: hash_password ? await this.encrypterService.hashPassword(hash_password) : hash_password
     });
+
+    const response = user[1].map( (data)=> ({
+      id: data.id,
+      username: data.username,
+      email: data.email
+    }) )
+
+    return {
+      message: 'User update succesfully',
+      user: response
+    }
 
   }
 

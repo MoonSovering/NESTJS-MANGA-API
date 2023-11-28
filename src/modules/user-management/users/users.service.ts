@@ -12,7 +12,7 @@ export class UsersService {
     private readonly userModel: typeof User,
   ){}
 
-  async createUser(body: CreateUserDto) {
+  async createUser(body: CreateUserDto): Promise<User> {
 
     const { ...userDetails } = body
 
@@ -28,7 +28,7 @@ export class UsersService {
   async findAllUser( query: {
     limit: number;
     offset: number;
-  } ) {
+  } ): Promise<User[]> {
     const { limit, offset } = query;
     return await this.userModel.findAll({
       limit,
@@ -36,13 +36,19 @@ export class UsersService {
     })
   }
 
-  async findOneUser(email: string) {
+  async findOneUser(email: string): Promise<User> {
     return await this.userModel.findOne({
       where: {email: email}
     })
   }
 
-  async updateUser(uuid: string, body: UpdateUserDto){
+  async findOneUserById( uuid: string ): Promise<User>{
+    return await this.userModel.findOne({
+      where: {id: uuid}
+    })
+  }
+
+  async updateUser(uuid: string, body: UpdateUserDto): Promise<[number, User[]]>{
 
     return await this.userModel.update(
       body,
@@ -51,7 +57,7 @@ export class UsersService {
 
   }
 
-  async removeUser(uuid: string) {
+  async removeUser(uuid: string): Promise<number> {
     return await this.userModel.destroy({
       where: {id: uuid}
     })

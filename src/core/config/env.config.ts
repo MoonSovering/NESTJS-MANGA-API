@@ -26,6 +26,9 @@ export const validationSchema = Joi.object({
     DATABASE_NAME: Joi.string(),
     CLOUDINARY_NAME: Joi.string().required(),
     CLOUDINARY_API_KEY: Joi.string().required(),
-    CLOUDINARY_API_SECRET: Joi.string().required()
-})
->>>>>>> 5853b24 (feat adding user module)
+    CLOUDINARY_API_SECRET: Joi.string().required(),
+    JWT_TOKEN_PRIVATE_KEY: Joi.string().required(),
+    JWT_TOKEN_AUDIENCE: Joi.string().required(),
+    JWT_TOKEN_EXPIRE_IN: Joi.string().default('2h'),
+    SERVER_URL: Joi.string().required()
+});
