@@ -12,12 +12,6 @@ export const validationSchema = Joi.object({
     NODE_ENV: Joi.string()
         .valid(...Object.values(Environment))
         .default(Environment.Development),
-<<<<<<< HEAD
-    PORT: Joi.number().default(3000)
-    
-})
-  
-=======
     PORT: Joi.number().default(3000),
     DATABASE_HOST: Joi.string().required(),
     DATABASE_PORT: Joi.number().required(),
@@ -35,5 +29,4 @@ export const validationSchema = Joi.object({
     SERVER_EMAIL_ADDRES: Joi.string().required(),
     AWS_SECRET_ACCES_KEY: Joi.string().required(),
     AWS_ACCES_KEY: Joi.string().required()
-
 });
