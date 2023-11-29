@@ -10,6 +10,9 @@ import { MangaService } from '../manga/manga.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformNamePipe } from 'src/core/pipes';
+import { validRoles } from 'src/modules/user-management/roles/enum.roles';
+import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 
 @ApiTags('Chapters')
 @Controller('chapter')
@@ -22,6 +25,7 @@ export class ChaptersController {
     ) {}
 
   @Post()
+  @Auth(validRoles.Admin, validRoles.Partner)
   @ApiOperation({
     summary: 'Create a new chapter',
     description: 'Create a new chapter'
@@ -64,6 +68,7 @@ export class ChaptersController {
   }
 
   @Get()
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get all chapters',
     description: 'Get all chapters'
@@ -96,6 +101,7 @@ export class ChaptersController {
   }
 
   @Get(':uuid')
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get one chapter by ID(uuid)',
     description: 'Get one chapter by ID(uuid)'
@@ -121,6 +127,7 @@ export class ChaptersController {
   }
 
   @Delete(':uuid')
+  @Auth(validRoles.Admin)
   @ApiOperation({
     summary: 'Deleted one chapter by ID(uuid)',
     description: 'Deleted one chapter by ID(uuid)'

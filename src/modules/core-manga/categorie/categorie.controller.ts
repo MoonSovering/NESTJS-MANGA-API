@@ -5,6 +5,9 @@ import { Categorie } from './entities';
 import { CreateCategorieDto, CategorySearchQueryDto } from './dto';
 import { CategorieService } from './categorie.service';
 import { ParseTransformArrayPipe } from 'src/core/pipes';
+import { validRoles } from 'src/modules/user-management/roles/enum.roles';
+import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 
 @ApiTags('Categories')
 @Controller('categorie')
@@ -12,6 +15,7 @@ export class CategorieController {
   constructor(private readonly categorieService: CategorieService) {}
 
   @Post()
+  @Auth(validRoles.Admin, validRoles.Partner)
   @ApiOperation({
     summary: 'Create a new category',
     description: 'Create a new category'
@@ -27,6 +31,7 @@ export class CategorieController {
   }
 
   @Get()
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get all categories',
     description: 'Get all categories'
@@ -63,6 +68,7 @@ export class CategorieController {
 
 
   @Get(':uuid')
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get one category by ID(uuid)',
     description: 'Get one category by ID(uuid)'
@@ -93,6 +99,7 @@ export class CategorieController {
   }
 
   @Delete(':uuid')
+  @Auth(validRoles.Admin)
   @ApiOperation({
     summary: 'Deleted one category by ID(uuid)',
     description: 'Deleted one category by ID(uuid)'

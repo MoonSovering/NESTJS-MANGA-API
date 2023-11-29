@@ -30,5 +30,10 @@ export const validationSchema = Joi.object({
     JWT_TOKEN_PRIVATE_KEY: Joi.string().required(),
     JWT_TOKEN_AUDIENCE: Joi.string().required(),
     JWT_TOKEN_EXPIRE_IN: Joi.string().default('2h'),
-    SERVER_URL: Joi.string().required()
+    JWT_TOKE_RECOVERY_PASSWORD: Joi.string().default('5m'),
+    SERVER_URL: Joi.string().required(),
+    SERVER_EMAIL_ADDRES: Joi.string().required(),
+    AWS_SECRET_ACCES_KEY: Joi.string().required(),
+    AWS_ACCES_KEY: Joi.string().required()
+
 });

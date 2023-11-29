@@ -1,14 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
-import { Author } from './entities/author.entity';
 import { CreateAuthorDto, UpdateAuthorDto, AuthorSearchQueryDto } from './dto';
+import { Author } from './entities/author.entity';
 import { AuthorService } from './author.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformNamePipe } from 'src/core/pipes';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from 'src/modules/user-management/authorization/guards/jwt-auth.guard';
+import { validRoles } from 'src/modules/user-management/roles/enum.roles';
+import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
+
 
 @ApiTags('Authors')
 @Controller('author')
@@ -18,7 +21,9 @@ export class AuthorController {
     private readonly imageProcessingService: ImageProcessingHelperService
     ) {}
 
+    
   @Post()
+  @Auth(validRoles.Admin, validRoles.Partner)
   @ApiOperation({
     summary: 'Create a new author',
     description: 'Create a new author'
@@ -45,6 +50,7 @@ export class AuthorController {
   }
 
   @Get()
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get all authors',
     description: 'Get all authors'
@@ -84,6 +90,7 @@ export class AuthorController {
   }
 
   @Get(':uuid')
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get one author by ID(uuid)',
     description: 'Get one author by ID(uuid)'
@@ -118,6 +125,7 @@ export class AuthorController {
   }
 
   @Patch(':uuid')
+  @Auth(validRoles.Admin)
   @ApiOperation({
     summary: 'Edit one author by ID(uuid)',
     description: 'Edit one author by ID(uuid)'
@@ -136,6 +144,7 @@ export class AuthorController {
   }
 
   @Delete(':uuid')
+  @Auth(validRoles.Admin)
   @UseGuards(AuthGuard('access_token'))
   @ApiOperation({
     summary: 'Deleted one author by ID(uuid)',

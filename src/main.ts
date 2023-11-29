@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import { swaggerConfig } from './core/config';
+import { RolesGuard } from './modules/user-management/roles/guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

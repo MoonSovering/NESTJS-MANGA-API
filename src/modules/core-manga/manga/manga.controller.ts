@@ -12,6 +12,9 @@ import { CategorieService } from '../categorie/categorie.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformArrayPipe, ParseTransformNamePipe } from 'src/core/pipes';
+import { validRoles } from 'src/modules/user-management/roles/enum.roles';
+import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 
 
 @ApiTags('Mangas')
@@ -26,6 +29,7 @@ export class MangaController {
     ) {}
 
   @Post()
+  @Auth(validRoles.Admin, validRoles.Partner)
   @ApiOperation({
     summary: 'Create a new manga',
     description: 'Create a new manga'
@@ -71,6 +75,7 @@ export class MangaController {
 
 
   @Get()
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get all mangas',
     description: 'Get all mangas'
@@ -110,6 +115,7 @@ export class MangaController {
   }
 
   @Get(':uuid')
+  @PublicRoute()
   @ApiOperation({
     summary: 'Get one manga by ID(uuid)',
     description: 'Get one manga by ID(uuid)'
@@ -142,6 +148,7 @@ export class MangaController {
   }
 
   @Delete(':uuid')
+  @Auth(validRoles.Admin)
   @ApiOperation({
     summary: 'Deleted one manga by ID(uuid)',
     description: 'Deleted one manga by ID(uuid)'
