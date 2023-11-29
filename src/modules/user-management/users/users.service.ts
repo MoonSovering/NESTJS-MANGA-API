@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
+import { Manga } from 'src/modules/core-manga/manga/entities';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +45,8 @@ export class UsersService {
 
   async findOneUserById( uuid: string ): Promise<User>{
     return await this.userModel.findOne({
-      where: {id: uuid}
+      where: {id: uuid},
+      include: [{model: Manga}]
     })
   }
 

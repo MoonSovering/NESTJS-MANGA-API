@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BeforeCreate, BeforeUpdate, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeUpdate, BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { Manga } from "src/modules/core-manga/manga/entities";
+import { UserFavoriteManga } from "src/modules/core-manga/user-favorite-manga/entities/user-favorite-manga.entity";
 
 
 @Table
@@ -63,6 +65,9 @@ export class User extends Model {
         defaultValue: 'user'
     })
     role: string;
+
+    @BelongsToMany( () => Manga, () => UserFavoriteManga )
+    mangas: Manga[]
 
     @BeforeUpdate
     @BeforeCreate

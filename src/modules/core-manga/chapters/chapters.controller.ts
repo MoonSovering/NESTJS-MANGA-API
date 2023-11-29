@@ -44,7 +44,7 @@ export class ChaptersController {
 
     const { manga_name, image_url = [], ...chapterDetails} = body;
 
-    const manga = await this.mangaService.findOneMangaId(manga_name);
+    const manga = await this.mangaService.findOneMangaByName(manga_name);
     if(!manga) throw new BadRequestException(`Manga with ID ${manga_name} cannot be found.`)
 
     const dataimg = await this.imageProcessingService.imageProcessing(file);

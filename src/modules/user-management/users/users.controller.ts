@@ -8,6 +8,7 @@ import { Auth } from '../auth-decorator/auth.decorator';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import { EncrypterService } from 'src/core/services/encrypter/encrypter.service';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 
 @ApiTags('Users')
 @Controller('user')
@@ -86,6 +87,37 @@ export class UsersController {
     return {
       message: 'User created succesfully',
       user: response
+    }
+  }
+
+  
+  @Get(':uuid')
+  @PublicRoute()
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete one user by ID(uuid)',
+    description: 'Delete one user by ID(uuid), roles required to acces this route: [Admin]'
+  })
+  @ApiResponse({ status: 200, description: 'Manga deleted succesfully'})
+  @ApiResponse({ status: 400, description: 'No deleted were made.' })
+  async findOneUser(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const user = await this.userService.findOneUserById(uuid);
+
+    if(!user) throw new BadRequestException(`No user found with ID ${uuid}.`);
+
+    const response = {
+      username: user.username,
+      email: user.email,
+      mangas: user.mangas.map( (manga) => ({
+        id: manga.id, 
+        manga_name: manga.manga_name,
+        cover_image: manga.cover_image
+      }) )
+    }
+
+    return {
+      message: 'Manga deleted succesfully.',
+      data: response
     }
   }
 

@@ -37,15 +37,15 @@ export class AuthorService {
     return await this.authorModel.findAll({
       limit,
       offset,
-      include: [{model: Manga, include: [{model: Chapter, include: [Images]}]}]
+      include: [{model: Manga }]
     } );
   }
 
   async findOneAuthor(uuid: string) {
-    return await this.authorModel.findOne({ where: {id: uuid}, include: [{model: Manga, include: [{model: Chapter, include: [Images]}]}] });
+    return await this.authorModel.findOne({ where: {id: uuid}, include: [{model: Manga}] });
   }
 
-  async findOneAuthorId(name: string){
+  async findOneAuthorByName(name: string){
     return await this.authorModel.findOne({
       where: {author_name: name}
     })

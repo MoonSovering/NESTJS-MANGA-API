@@ -18,6 +18,7 @@ import { AuthorizationModule } from './modules/user-management/authorization/aut
 import { RestorePasswordModule } from './modules/user-management/restore-password/restore-password.module';
 import { databaseConfigFactory, validationSchema, throttlerConfig } from './core/config';
 import { SesSendmailService } from './core/services/aws-mail/ses-sendmail.service';
+import { UserFavoriteMangaModule } from './modules/core-manga/user-favorite-manga/user-favorite-manga.module';
 
 
 
@@ -34,7 +35,7 @@ import { SesSendmailService } from './core/services/aws-mail/ses-sendmail.servic
     validationSchema
   }),
   ThrottlerModule.forRoot([throttlerConfig]),
-  MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule, UsersModule, AuthenticationModule, AuthorizationModule, RestorePasswordModule],
+  MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule, UsersModule, AuthenticationModule, AuthorizationModule, RestorePasswordModule, UserFavoriteMangaModule],
 
   controllers: [],
   exports: [SequelizeModule],

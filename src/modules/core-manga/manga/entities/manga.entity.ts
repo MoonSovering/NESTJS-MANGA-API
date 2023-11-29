@@ -4,6 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Author } from '../../author/entities/author.entity';
 import { Chapter } from '../../chapters/entities';
 import { Categorie, MangaCategorie } from '../../categorie/entities';
+import { User } from 'src/modules/user-management/users/entities/user.entity';
+import { UserFavoriteManga } from '../../user-favorite-manga/entities/user-favorite-manga.entity';
 
 
 
@@ -86,6 +88,8 @@ export class Manga extends Model {
     @BelongsToMany( () => Categorie, () => MangaCategorie )
     categories: Categorie[]
 
+    @BelongsToMany( () => User, () => UserFavoriteManga )
+    users: User[]
 
     @BeforeUpdate
     @BeforeCreate

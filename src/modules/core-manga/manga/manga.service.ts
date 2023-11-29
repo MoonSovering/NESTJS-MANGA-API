@@ -58,7 +58,7 @@ export class MangaService {
     });
   }
 
-  async findOneMangaId (name: string){
+  async findOneMangaByName (name: string){
     return await this.mangaModel.findOne({
       where: {manga_name: name}
     })

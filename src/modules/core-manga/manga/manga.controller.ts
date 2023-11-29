@@ -50,7 +50,7 @@ export class MangaController {
 
     if(file) [body.cover_image] = await this.imageProcessingService.imageProcessing(file);
     const { author_name, categorie_name = [],...mangaDetails } = body;
-    const isValidAuthor = await this.authorService.findOneAuthorId(author_name);
+    const isValidAuthor = await this.authorService.findOneAuthorByName(author_name);
     if(!isValidAuthor) throw new BadRequestException(`Author with name ${author_name} cannot be found.`)
     const categoryIds = (await this.categorieService.findManyCategory(categorie_name)).map( id => id.id );
     

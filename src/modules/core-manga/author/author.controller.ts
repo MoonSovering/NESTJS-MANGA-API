@@ -70,17 +70,11 @@ export class AuthorController {
       id: result.id,
       author_name: result.author_name,
       profile_image: result.profile_image,
-      mangas: result.mangas.map((manga) => ({
-        id: manga.id,
+      mangas: result.mangas.map( (manga) => ({
+        id: manga.id, 
         manga_name: manga.manga_name,
-        cover_image: manga.cover_image,
-        chapters: manga.chapters.map( (chapter) => ({
-          id: chapter.id,
-          chapter_name: chapter.chapter_name,
-          chapter_number: chapter.chapter_number,
-          images: chapter.images.map( (images) => ( images.image_url ) )
-        }) )
-      }))
+        cover_image: manga.cover_image
+      }) )
     }));
 
     return {
@@ -108,13 +102,7 @@ export class AuthorController {
       mangas: result.mangas.map( (manga) => ({
         id: manga.id, 
         manga_name: manga.manga_name,
-        cover_image: manga.cover_image,
-        chapters: manga.chapters.map( (chapter) => ({
-          id: chapter.id,
-          chapter_name: chapter.chapter_name,
-          chapter_number: chapter.chapter_number,
-          images: chapter.images.map( (images) => ( images.image_url ) )
-        }) ) 
+        cover_image: manga.cover_image
       }) )
     }
 
