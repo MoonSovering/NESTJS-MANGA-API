@@ -4,10 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-
-
-import { databaseConfigFactory, validationSchema, throttlerConfig } from './core/config';
-
 import { ResizefileModule } from './modules/image-processing/resizefile/resizefile.module';
 import { MangaModule } from './modules/core-manga/manga/manga.module';
 import { AuthorModule } from './modules/core-manga/author/author.module';
@@ -20,6 +16,7 @@ import { UsersModule } from './modules/user-management/users/users.module';
 import { AuthenticationModule } from './modules/user-management/authentication/authentication.module';
 import { AuthorizationModule } from './modules/user-management/authorization/authorization.module';
 import { RestorePasswordModule } from './modules/user-management/restore-password/restore-password.module';
+import { databaseConfigFactory, validationSchema, throttlerConfig } from './core/config';
 import { SesSendmailService } from './core/services/aws-mail/ses-sendmail.service';
 
 

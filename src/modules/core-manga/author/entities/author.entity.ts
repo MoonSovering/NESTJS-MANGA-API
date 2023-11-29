@@ -54,7 +54,7 @@ export class Author extends Model {
         type: DataType.BOOLEAN,
         defaultValue: true
      })
-    status: boolean
+    isActive: boolean
 
     @HasMany( () => Manga )
     mangas: Manga[]

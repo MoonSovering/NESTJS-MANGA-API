@@ -1,16 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateAuthorDto, UpdateAuthorDto, AuthorSearchQueryDto } from './dto';
 import { Author } from './entities/author.entity';
-import { AuthorService } from './author.service';
-import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
 import { ParseTransformNamePipe } from 'src/core/pipes';
 import { validRoles } from 'src/modules/user-management/roles/enum.roles';
 import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
 import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
+import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
+import { AuthorService } from './author.service';
 
 
 @ApiTags('Authors')
@@ -24,9 +23,10 @@ export class AuthorController {
     
   @Post()
   @Auth(validRoles.Admin, validRoles.Partner)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create a new author',
-    description: 'Create a new author'
+    description: 'Create a new author, roles required to access this route: [Admin, Partner]'
   })
   @ApiResponse({ status: 201, description: 'Author created succesfully', type: Author })
   @ApiResponse({ status: 400, description: 'Author already exits in database' })
@@ -126,9 +126,10 @@ export class AuthorController {
 
   @Patch(':uuid')
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Edit one author by ID(uuid)',
-    description: 'Edit one author by ID(uuid)'
+    description: 'Edit one author by ID(uuid), roles required to access this route: [Admin]'
   })
   @ApiResponse({ status: 200, description: 'Author edited succesfully'})
   @ApiResponse({ status: 400, description: 'No edit were made.' })
@@ -145,10 +146,10 @@ export class AuthorController {
 
   @Delete(':uuid')
   @Auth(validRoles.Admin)
-  @UseGuards(AuthGuard('access_token'))
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Deleted one author by ID(uuid)',
-    description: 'Deleted one author by ID(uuid)'
+    description: 'Deleted one author by ID(uuid), roles required to acces this route: [Admin]'
   })
   @ApiResponse({ status: 200, description: 'Author deleted succesfully'})
   @ApiResponse({ status: 400, description: 'No deleted were made.' })

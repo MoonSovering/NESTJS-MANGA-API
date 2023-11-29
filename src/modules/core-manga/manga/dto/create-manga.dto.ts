@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsBoolean, IsOptional, MinLength, IsArray, ArrayNotEmpty } from "class-validator";
+import { IsString, IsBoolean, IsOptional, MinLength, IsArray, ArrayNotEmpty, IsNotEmpty } from "class-validator";
 
 
 export class CreateMangaDto {
@@ -32,6 +32,14 @@ export class CreateMangaDto {
     @IsString({ each: true })
     @ArrayNotEmpty()
     categorie_name: string[];
+
+    @ApiProperty({
+        example: 'One Piece is a popular manga and anime series written and illustrated by Eiichiro Oda',
+        description: 'The description of the manga.',
+    })
+    @IsString()
+    @IsOptional()
+    manga_description?: string;
 
     @ApiProperty({
         example: 'MyImage.jpg',

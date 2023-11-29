@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Param, Delete, Query, BadRequestException, ParseUUIDPipe, Patch } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { CreateUserDto, searchUserQueryDto, UpdateUserDto } from './dto';
-import { EncrypterService } from 'src/core/services/encrypter/encrypter.service';
 import { ParseTransformNamePipe } from 'src/core/pipes/parseTransformName.pipe';
 import { validRoles } from '../roles/enum.roles';
 import { Auth } from '../auth-decorator/auth.decorator';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
+import { EncrypterService } from 'src/core/services/encrypter/encrypter.service';
 
 @ApiTags('Users')
 @Controller('user')
@@ -18,12 +19,13 @@ export class UsersController {
 
   @Post()
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create a new user',
-    description: 'Create a new user'
+    description: 'Create a new user, roles required to acces this route: [Admin]'
   })
-  @ApiResponse({ status: 201, description: 'Author created succesfully', type: User })
-  @ApiResponse({ status: 400, description: 'Author already exits in database' })
+  @ApiResponse({ status: 201, description: 'User created succesfully', type: User })
+  @ApiResponse({ status: 400, description: 'User already exits in database' })
   async createUser(@Body() body: CreateUserDto) {
 
     const { username, email, hash_password } = body;
@@ -56,9 +58,10 @@ export class UsersController {
 
   @Get()
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get all users',
-    description: 'Get all users'
+    description: 'Get all users, roles required to acces this route: [Admin]'
   })
   @ApiResponse({ status: 200, description: 'Users fetched succesfully', type: [User] })
   @ApiResponse({ status: 400, description: 'No users found in the user list.' })
@@ -88,12 +91,13 @@ export class UsersController {
 
   @Patch(':uuid')
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get all users',
-    description: 'Get all users'
+    summary: 'Edit one user by ID(uuid)',
+    description: 'Edit one user by ID(uuid), roles required to acces this route: [Admin]'
   })
-  @ApiResponse({ status: 200, description: 'User fetched succesfully', type: [User] })
-  @ApiResponse({ status: 400, description: 'No user found..' })
+  @ApiResponse({ status: 200, description: 'User edited succesfully'})
+  @ApiResponse({ status: 400, description: 'No edit were made.' })
   async updateUser(@Param('uuid', new ParseUUIDPipe()) uuid: string, @Body(ParseTransformNamePipe) body: UpdateUserDto) {
 
     const isValidUser = await this.userService.findOneUserById(uuid);
@@ -123,19 +127,20 @@ export class UsersController {
 
   @Delete(':uuid')
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Edit one user by ID(uuid)',
-    description: 'Edit one user by ID(uuid)'
+    summary: 'Delete one user by ID(uuid)',
+    description: 'Delete one user by ID(uuid), roles required to acces this route: [Admin]'
   })
-  @ApiResponse({ status: 200, description: 'User edited succesfully'})
-  @ApiResponse({ status: 400, description: 'No edit were made.' })
+  @ApiResponse({ status: 200, description: 'Manga deleted succesfully'})
+  @ApiResponse({ status: 400, description: 'No deleted were made.' })
   async removeUser(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     const deleted = await this.userService.removeUser(uuid);
 
     if(deleted <= 0) throw new BadRequestException('No deleted were made.');
 
     return {
-      message: 'Manga deleted succesfully',
+      message: 'Manga deleted succesfully.',
       data: deleted
     }
   }

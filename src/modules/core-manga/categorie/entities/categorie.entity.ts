@@ -42,7 +42,7 @@ export class Categorie extends Model {
         type: DataType.BOOLEAN,
         defaultValue: true
     })
-    status: boolean;
+    isActive: boolean;
 
     @BelongsToMany( () => Manga, () => MangaCategorie )
     mangas: Manga[]

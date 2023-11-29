@@ -9,9 +9,8 @@ import { EncrypterService } from 'src/core/services/encrypter/encrypter.service'
 import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('auth')
-@PublicRoute()
 @ApiTags('Auth')
+@Controller('auth')
 export class AuthenticationController {
   constructor(
     private readonly jwtService: JwtService,
@@ -21,6 +20,7 @@ export class AuthenticationController {
     ) {}
 
   @Post('sign-in')
+  @PublicRoute()
   @UseGuards(LocalAuthGuard)
   @ApiOperation({
     summary: 'Sign in with Email & Password',

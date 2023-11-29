@@ -1,20 +1,20 @@
 import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, ParseUUIDPipe, BadRequestException, Query } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
 
 import { Manga } from './entities';
 import { CreateMangaDto, MangaSearchQueryDto } from './dto';
+import { ParseTransformArrayPipe, ParseTransformNamePipe } from 'src/core/pipes';
+import { validRoles } from 'src/modules/user-management/roles/enum.roles';
+import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
+import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 import { MangaService } from './manga.service';
 import { AuthorService } from '../author/author.service';
 import { CategorieService } from '../categorie/categorie.service';
 import { CloudinaryService } from 'src/modules/image-processing/cloudinary/cloudinary.service';
 import { ImageProcessingHelperService } from 'src/modules/image-processing/image-processing-helper/image-processing-helper.service';
-import { ParseTransformArrayPipe, ParseTransformNamePipe } from 'src/core/pipes';
-import { validRoles } from 'src/modules/user-management/roles/enum.roles';
-import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
-import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
 
 
 @ApiTags('Mangas')
@@ -30,9 +30,10 @@ export class MangaController {
 
   @Post()
   @Auth(validRoles.Admin, validRoles.Partner)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create a new manga',
-    description: 'Create a new manga'
+    description: 'Create a new manga, roles required to acces this route: [Admin, Partner]'
   })
   @ApiResponse({ status: 201, description: 'Mangas created succesfully', type: Manga })
   @ApiResponse({ status: 400, description: 'Manga already exits in database' })
@@ -149,9 +150,10 @@ export class MangaController {
 
   @Delete(':uuid')
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Deleted one manga by ID(uuid)',
-    description: 'Deleted one manga by ID(uuid)'
+    description: 'Deleted one manga by ID(uuid), roles required to acces this route: [Admin]'
   })
   @ApiResponse({ status: 200, description: 'Manga deleted succesfully'})
   @ApiResponse({ status: 400, description: 'No deleted were made.' })

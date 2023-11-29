@@ -54,6 +54,16 @@ export class Manga extends Model {
     })
     @ForeignKey( () => Author )
     author_name: string;
+
+    @ApiProperty({
+        example: 'One Piece is a popular manga and anime series written and illustrated by Eiichiro Oda',
+        description: 'The description of the manga.',
+    })
+    @Column({
+        allowNull: true,
+        type: DataType.TEXT,
+    })
+    manga_description: string;
     
     @ApiProperty({
         example: true,

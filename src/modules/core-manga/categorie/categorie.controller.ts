@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Param, Delete, ParseUUIDPipe, BadRequestException, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Categorie } from './entities';
 import { CreateCategorieDto, CategorySearchQueryDto } from './dto';
-import { CategorieService } from './categorie.service';
 import { ParseTransformArrayPipe } from 'src/core/pipes';
 import { validRoles } from 'src/modules/user-management/roles/enum.roles';
 import { Auth } from 'src/modules/user-management/auth-decorator/auth.decorator';
 import { PublicRoute } from 'src/core/auth-public-role/public-role.decorator';
+import { CategorieService } from './categorie.service';
 
 @ApiTags('Categories')
 @Controller('categorie')
@@ -16,9 +16,10 @@ export class CategorieController {
 
   @Post()
   @Auth(validRoles.Admin, validRoles.Partner)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create a new category',
-    description: 'Create a new category'
+    description: 'Create a new category, roles required to acces this route: [Admin, Partner]'
   })
   @ApiResponse({ status: 201, description: 'Category created succesfully', type: Categorie })
   async create(@Body(ParseTransformArrayPipe) body: CreateCategorieDto) {
@@ -100,9 +101,10 @@ export class CategorieController {
 
   @Delete(':uuid')
   @Auth(validRoles.Admin)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Deleted one category by ID(uuid)',
-    description: 'Deleted one category by ID(uuid)'
+    description: 'Deleted one category by ID(uuid), roles required to acces this route: [Admin]'
   })
   @ApiResponse({ status: 200, description: 'Category deleted succesfully'})
   @ApiResponse({ status: 400, description: 'No deleted were made.' })
