@@ -38,7 +38,7 @@ export class Images extends Model {
         allowNull: false,
         type: DataType.INTEGER
     })
-    page_number: string;
+    page_number: number;
 
     @ApiProperty({
         example: '77e9284c-d89f-43fb-9121-eda80b9c2e08',
@@ -50,4 +50,5 @@ export class Images extends Model {
 
     @BelongsTo( () => Chapter )
     chapter: Chapter;
+
 }

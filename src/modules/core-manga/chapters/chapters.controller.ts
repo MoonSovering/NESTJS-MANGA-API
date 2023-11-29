@@ -39,7 +39,7 @@ export class ChaptersController {
     const { id_manga, image_url = [], ...chapterDetails} = body;
 
     const manga = await this.mangaService.findOneManga(id_manga);
-    if(!manga) throw new BadRequestException(`Author with ID ${id_manga} cannot be found.`)
+    if(!manga) throw new BadRequestException(`Manga with ID ${id_manga} cannot be found.`)
 
     const dataimg = await this.imageProcessingService.imageProcessing(file);
 
@@ -55,8 +55,6 @@ export class ChaptersController {
       chapter_name: chapter.chapter_name,
       chapter_number: chapter.chapter_number
     }
-
-    console.log(dataimg);
 
     return {
       message: 'Chapter created succesfully',

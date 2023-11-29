@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { BeforeCreate, BeforeUpdate, BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 
 import { Images } from "./images.entity";
 import { Manga } from "../../manga/entities";
@@ -55,4 +55,16 @@ export class Chapter extends Model{
 
     @HasMany( ()=> Images )
     images: Images[]
+
+    @BeforeUpdate
+    @BeforeCreate
+    static checkNameInsert( instance: Chapter ) {
+        instance.chapter_number = instance.chapter_number
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+
+        instance.chapter_name = instance.chapter_name
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+    }
 }

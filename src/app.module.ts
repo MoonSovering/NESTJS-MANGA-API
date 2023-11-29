@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
+
+
 import { databaseConfigFactory, validationSchema } from './core/config';
 
 import { ResizefileModule } from './modules/image-processing/resizefile/resizefile.module';
@@ -12,6 +14,10 @@ import { CloudinaryModule } from './modules/image-processing/cloudinary/cloudina
 import { ChaptersModule } from './modules/core-manga/chapters/chapters.module';
 import { UnzipModule } from './modules/image-processing/unzip/unzip.module';
 import { ImageProcessingHelperModule } from './modules/image-processing/image-processing-helper/image-processing-helper.module';
+import { UsersModule } from './modules/user-management/users/users.module';
+import { AuthenticationModule } from './modules/user-management/authentication/authentication.module';
+import { AuthorizationModule } from './modules/user-management/authorization/authorization.module';
+import { EncrypterService } from './core/services/encrypter/encrypter.service';
 
 
 @Module({
@@ -25,9 +31,10 @@ import { ImageProcessingHelperModule } from './modules/image-processing/image-pr
     isGlobal: true,
     envFilePath: `src/core/env/${process.env.NODE_ENV}.env`,
     validationSchema
-  }), MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule],
+  }), MangaModule, AuthorModule, CategorieModule, CloudinaryModule, ChaptersModule, UnzipModule, ResizefileModule, ImageProcessingHelperModule, UsersModule, AuthenticationModule, AuthorizationModule],
 
   controllers: [],
-  exports: [SequelizeModule]
+  exports: [SequelizeModule],
+  providers: [EncrypterService]
 })
 export class AppModule {}

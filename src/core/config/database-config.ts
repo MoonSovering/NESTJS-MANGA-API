@@ -3,6 +3,7 @@ import { Dialect } from "sequelize";
 
 
 export const databaseConfigFactory = (configService: ConfigService) => ({
+<<<<<<< HEAD
     dialect: 'postgres' as Dialect,
     port: +configService.get('DATABASE_PORT'),
     host: configService.get('DATABASE_HOST'),
@@ -12,3 +13,14 @@ export const databaseConfigFactory = (configService: ConfigService) => ({
     synchronize: true,
     autoLoadModels: true
   })
+=======
+  dialect: 'postgres' as Dialect,
+  port: +configService.get('DATABASE_PORT'),
+  host: configService.get('DATABASE_HOST'),
+  username: configService.get('DATABASE_USER'),
+  password: configService.get('DATABASE_PASSWORD'),
+  database: configService.get('DATABASE_NAME'),
+  synchronize: true,
+  autoLoadModels: true
+})
+>>>>>>> 5853b24 (feat adding user module)
