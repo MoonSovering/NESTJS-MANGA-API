@@ -47,7 +47,7 @@ export class RestorePasswordController {
       {
         privateKey: this.configService.getOrThrow<string>('JWT_TOKEN_PRIVATE_KEY')
           .replace(/\\n/g, '\n'),
-        expiresIn: this.configService.getOrThrow<string>('JWT_TOKE_RECOVERY_PASSWORD'),
+        expiresIn: this.configService.getOrThrow<string>('JWT_TOKEN_RECOVERY_PASSWORD'),
         subject: user.id,
         audience: this.configService.getOrThrow<string>('JWT_TOKEN_AUDIENCE'),
         issuer: this.configService.getOrThrow<string>('SERVER_URL'),
@@ -58,7 +58,7 @@ export class RestorePasswordController {
     const bodyEmail = {
       Destination: {
         ToAddresses: [
-          'josesmc99@gmail.com', // Replace this with the recipient’s email address.
+          email, // Replace this with the recipient’s email address.
         ]
       },
       Message: {

@@ -26,7 +26,7 @@ export class AuthenticationController {
     summary: 'Sign in with Email & Password',
     description: 'Sign in with Email & Password'
   })
-  @ApiResponse({ status: 201, description: 'User signed succesfully' })
+  @ApiResponse({ status: 201, description: 'User signed in succesfully' })
   @ApiResponse({ status: 400, description: 'User not found.' })
   async signIn(@Body() body: SignInLocalDto) {
     const { email } = body;
@@ -66,7 +66,7 @@ export class AuthenticationController {
     summary: 'Sign up with Email & Password',
     description: 'Sign up with Email & Password'
   })
-  @ApiResponse({ status: 201, description: 'User signed succesfully' })
+  @ApiResponse({ status: 201, description: 'User signed up succesfully' })
   @ApiResponse({ status: 400, description: 'User not found.' })
   async signUp(@Body() body: SignUpLocalDto) {
     const { email, hash_password, username } = body;
@@ -96,7 +96,7 @@ export class AuthenticationController {
     );
 
     return {
-      message: 'User signed in succesfully',
+      message: 'User signed up succesfully',
       data: {
         type: 'Bearer',
         access_token: validToken

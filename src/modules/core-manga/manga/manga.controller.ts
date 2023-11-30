@@ -63,7 +63,8 @@ export class MangaController {
     const response = {
       id: manga.id,
       manga_name: manga.manga_name,
-      cover_image: manga.cover_image
+      cover_image: manga.cover_image,
+      description: manga.manga_description
     }
 
     await manga.$add('categories', categoryIds);
@@ -79,7 +80,7 @@ export class MangaController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get all mangas',
-    description: 'Get all mangas'
+    description: 'Get all mangas, no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Mangas fetched succesfully', type: [Manga] })
   @ApiResponse({ status: 400, description: 'No manga found in the manga list.' })
@@ -98,6 +99,7 @@ export class MangaController {
       id: manga.id,
       manga_name: manga.manga_name,
       cover_image: manga.cover_image,
+      description: manga.manga_description,
       author: {id: manga.author.id, author_name: manga.author.author_name, profile_image: manga.author.profile_image},
       categories: manga.categories.map( category => category.categorie_name ),
       chapters: manga.chapters.map( chapter => ({
@@ -119,7 +121,7 @@ export class MangaController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get one manga by ID(uuid)',
-    description: 'Get one manga by ID(uuid)'
+    description: 'Get one manga by ID(uuid), no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Manga fetched succesfully', type: [Manga] })
   @ApiResponse({ status: 400, description: 'Manga cannot be found' })
@@ -132,6 +134,7 @@ export class MangaController {
       id: result.id,
       manga_name: result.manga_name,
       cover_image: result.cover_image,
+      description: result.manga_description,
       author: {id: result.author.id, author_name: result.author.author_name, profile_image: result.author.profile_image},
       categories: result.categories.map(category => category.categorie_name),
       chapters: result.chapters.map( chapter => ({

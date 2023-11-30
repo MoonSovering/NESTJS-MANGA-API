@@ -132,16 +132,16 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'No edit were made.' })
   async updateUser(@Param('uuid', new ParseUUIDPipe()) uuid: string, @Body(ParseTransformNamePipe) body: UpdateUserDto) {
 
+    const {email, hash_password, username} = body;
     const isValidUser = await this.userService.findOneUserById(uuid);
 
     if(!isValidUser) throw new BadRequestException(`User with ID ${uuid} cannot be found.`)
 
-    const {email, hash_password, username} = body;
-
+    const hashedPassword = await this.encrypterService.hashPassword(hash_password);
     const user = await this.userService.updateUser(uuid, {
       email,
       username,
-      hash_password: hash_password ? await this.encrypterService.hashPassword(hash_password) : hash_password
+      hash_password: hashedPassword
     });
 
     const response = user[1].map( (data)=> ({

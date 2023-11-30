@@ -53,7 +53,7 @@ export class AuthorController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get all authors',
-    description: 'Get all authors'
+    description: 'Get all authors, no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Authors fetched succesfully', type: [Author] })
   @ApiResponse({ status: 400, description: 'No authors found in the author list.' })
@@ -73,7 +73,8 @@ export class AuthorController {
       mangas: result.mangas.map( (manga) => ({
         id: manga.id, 
         manga_name: manga.manga_name,
-        cover_image: manga.cover_image
+        cover_image: manga.cover_image,
+        description: manga.manga_description
       }) )
     }));
 
@@ -87,7 +88,7 @@ export class AuthorController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get one author by ID(uuid)',
-    description: 'Get one author by ID(uuid)'
+    description: 'Get one author by ID(uuid), no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Author fetched succesfully', type: [Author] })
   @ApiResponse({ status: 400, description: 'Author cannot be found' })
@@ -102,7 +103,8 @@ export class AuthorController {
       mangas: result.mangas.map( (manga) => ({
         id: manga.id, 
         manga_name: manga.manga_name,
-        cover_image: manga.cover_image
+        cover_image: manga.cover_image,
+        description: manga.manga_description
       }) )
     }
 

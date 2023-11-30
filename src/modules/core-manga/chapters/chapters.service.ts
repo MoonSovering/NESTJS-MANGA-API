@@ -13,7 +13,7 @@ export class ChaptersService {
     private readonly chapterModel: typeof Chapter,
     @InjectModel(Images)
     private readonly imagesModel: typeof Images,
-    private sequelize: Sequelize
+    private readonly sequelize: Sequelize
   ){}
 
   async createChapter(body: CreateChapterDto) {

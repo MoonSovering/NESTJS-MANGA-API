@@ -35,7 +35,7 @@ export class CategorieController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get all categories',
-    description: 'Get all categories'
+    description: 'Get all categories, no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Categories fetched succesfully', type: [Categorie] })
   @ApiResponse({ status: 400, description: 'No category found in the categories list.' })
@@ -56,7 +56,8 @@ export class CategorieController {
         id: data.id,
         manga_name: data.manga_name,
         chapters: data.chapters,
-        cover_image: data.cover_image
+        cover_image: data.cover_image,
+        description: data.manga_description
       }))
     }));
 
@@ -72,7 +73,7 @@ export class CategorieController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get one category by ID(uuid)',
-    description: 'Get one category by ID(uuid)'
+    description: 'Get one category by ID(uuid), no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Category fetched succesfully', type: [Categorie] })
   @ApiResponse({ status: 400, description: 'Category cannot be found' })
@@ -89,7 +90,8 @@ export class CategorieController {
         id: data.id, 
         manga_name: data.manga_name,
         chapters: data.chapters,
-        cover_image: data.cover_image
+        cover_image: data.cover_image,
+        description: data.manga_description
       }) )
     }
 

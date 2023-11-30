@@ -72,7 +72,7 @@ export class ChaptersController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get all chapters',
-    description: 'Get all chapters'
+    description: 'Get all chapters, no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Chapters fetched succesfully', type: [Chapter] })
   @ApiResponse({ status: 400, description: 'No chapter found in the chapters list.' })
@@ -105,7 +105,7 @@ export class ChaptersController {
   @PublicRoute()
   @ApiOperation({
     summary: 'Get one chapter by ID(uuid)',
-    description: 'Get one chapter by ID(uuid)'
+    description: 'Get one chapter by ID(uuid), no roles are needed for this route.'
   })
   @ApiResponse({ status: 200, description: 'Chapter fetched succesfully', type: [Chapter] })
   @ApiResponse({ status: 400, description: 'Chapter cannot be found' })

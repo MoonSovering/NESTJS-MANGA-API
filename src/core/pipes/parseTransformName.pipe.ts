@@ -12,11 +12,15 @@ export class ParseTransformNamePipe implements PipeTransform {
     }
 
     if(value.chapter_name) {
-      value.chapter_name.toLowerCase().replace(/\s+/g, '_');
+      value.chapter_name = value.chapter_name.toLowerCase().replace(/\s+/g, '_');
     }
 
     if(value.username) {
-      value.username.toLowerCase().replace(/\s+/g, '_');
+      value.username = value.username.toLowerCase().replace(/\s+/g, '_');
+    }
+
+    if(value.manga_description){
+      value.manga_description = value.manga_description.toLowerCase().replace(/\s+/g, '_');
     }
 
     return value;

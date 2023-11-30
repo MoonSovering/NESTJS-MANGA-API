@@ -14,8 +14,8 @@ export class UserFavoriteMangaController {
   constructor(
     private readonly userFavoriteMangaService: UserFavoriteMangaService,
     private readonly mangaService: MangaService,
-    
     ) {}
+
   @Post()
   @ApiBearerAuth()
   @ApiOperation({
