@@ -31,7 +31,6 @@ import { UserFavoriteMangaModule } from './modules/core-manga/user-favorite-mang
     }),
     ConfigModule.forRoot({
     isGlobal: true,
-    envFilePath: `src/core/env/${process.env.NODE_ENV}.env`,
     validationSchema
   }),
   ThrottlerModule.forRoot([throttlerConfig]),
