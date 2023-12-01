@@ -11,5 +11,11 @@ export const databaseConfigFactory = (configService: ConfigService) => ({
   database: configService.get('DATABASE_NAME'),
   ssl: true,
   synchronize: true,
-  autoLoadModels: true
+  autoLoadModels: true,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 })
