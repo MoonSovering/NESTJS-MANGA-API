@@ -1,35 +1,51 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+An REST API with [Nest](https://github.com/nestjs/nest)
 
-## Installation
+This API was created with the intention of allowing users to view mangas & comics, register, and log in to add mangas to their list of preferred mangas. The API also enables users with the “Partners” role to create Genres, Authors, and Chapters for their Mangas.
+
+Decompress was used to allow Partners to upload a zip file containing all the images they wish to upload in a single file, and through the use of Sharp, a reduction of 70-80% in the size of the images uploaded by the Partners was achieved.
+
+## API
+
+API Swagger documentation:
+
+  - **GET** - /api/docs
+
+## Installation guide Github repository (Local environment)
+
+1. Clone repository
+2. Execute
 
 ```bash
 $ yarn install
+```
+
+3. Add NestCLI
+```bash
+$ yarn add -g @nestjs/cli
+```
+
+4. Clone file __.env.template__ and rename to __.env__
+
+5. Fill the missing fields of the __.env__ file
+
+6. Up database PostgresSQL
+```bash
+docker-compse up -d
+```
+
+## Installation guide Docker image (Local environment)
+
+1. Pull the API [Docker image](https://hub.docker.com/r/urranrell/nest-manga)
+3. Clone file __.env.template__ and rename to __.env__
+4. Fill the missing fields of the __.env__ file
+5. Up database PostgresSQL
+```bash
+docker-compse up -d
 ```
 
 ## Running the app
@@ -45,28 +61,17 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Armando Sanmartin]
+
+## Stack use
+* Nesjs
+* PostgresSQL
+* Sequelize
+* AWS SES
+* Cloudinary
+* Docker
 
 ## License
 
