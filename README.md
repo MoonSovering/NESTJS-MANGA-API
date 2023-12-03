@@ -14,7 +14,7 @@ Decompress was used to allow Partners to upload a zip file containing all the im
 
 API Swagger documentation:
 
-  - **GET** - /api/docs
+  - **DEPLOYED SWAGGER API LINK** [Here](http://nest-loader-806750485.us-east-1.elb.amazonaws.com/api/docs)
 
 ## Installation guide Github repository (Local environment)
 
