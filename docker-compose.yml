@@ -14,7 +14,7 @@ services:
       - 5432:5432
   
   manga:
-    image: urranrell/nest-manga:latest
+    image: urranrell/manga-nestv2:latest
     restart: always
     ports:
       - 3000:3000
